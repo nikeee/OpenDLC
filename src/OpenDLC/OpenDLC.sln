@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDLC", "OpenDLC\OpenDLC.csproj", "{431AF39E-76AC-4E44-8B72-E71800030548}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDLC-45", "OpenDLC\OpenDLC-45.csproj", "{F985EE7B-4937-426F-A33F-A97939C39291}"
+	ProjectSection(ProjectDependencies) = postProject
+		{431AF39E-76AC-4E44-8B72-E71800030548} = {431AF39E-76AC-4E44-8B72-E71800030548}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDLC.Tests", "OpenDLC.Tests\OpenDLC.Tests.csproj", "{FC69CC80-B01D-413F-AAC1-D0ECC63B47CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Distribution|Any CPU = Distribution|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{431AF39E-76AC-4E44-8B72-E71800030548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{431AF39E-76AC-4E44-8B72-E71800030548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{431AF39E-76AC-4E44-8B72-E71800030548}.Distribution|Any CPU.ActiveCfg = Distribution|Any CPU
+		{431AF39E-76AC-4E44-8B72-E71800030548}.Distribution|Any CPU.Build.0 = Distribution|Any CPU
+		{431AF39E-76AC-4E44-8B72-E71800030548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{431AF39E-76AC-4E44-8B72-E71800030548}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F985EE7B-4937-426F-A33F-A97939C39291}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F985EE7B-4937-426F-A33F-A97939C39291}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F985EE7B-4937-426F-A33F-A97939C39291}.Distribution|Any CPU.ActiveCfg = Distribution|Any CPU
+		{F985EE7B-4937-426F-A33F-A97939C39291}.Distribution|Any CPU.Build.0 = Distribution|Any CPU
+		{F985EE7B-4937-426F-A33F-A97939C39291}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F985EE7B-4937-426F-A33F-A97939C39291}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC69CC80-B01D-413F-AAC1-D0ECC63B47CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC69CC80-B01D-413F-AAC1-D0ECC63B47CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC69CC80-B01D-413F-AAC1-D0ECC63B47CF}.Distribution|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC69CC80-B01D-413F-AAC1-D0ECC63B47CF}.Distribution|Any CPU.Build.0 = Debug|Any CPU
+		{FC69CC80-B01D-413F-AAC1-D0ECC63B47CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC69CC80-B01D-413F-AAC1-D0ECC63B47CF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

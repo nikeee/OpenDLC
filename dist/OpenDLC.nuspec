@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>OpenDLC</id>
+        <version>1.0.0</version>
+        <authors>Niklas Mollenhauer</authors>
+        <licenseUrl>https://raw.github.com/nikeee/OpenDLC/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/nikeee/OpenDLC</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Opening up DLC formats.</description>
+    </metadata>
+</package>

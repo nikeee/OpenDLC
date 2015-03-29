@@ -1,0 +1,9 @@
+language: csharp
+solution: ./src/OpenDLC/OpenDLC.sln
+install:
+  - nuget restore ./src/OpenDLC/OpenDLC.sln
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release /p:PostBuildEventUseInBuild=false /p:PreBuildEvent="" /p:PostBuildEvent="" /p:TargetFrameworkProfile="" ./src/OpenDLC/OpenDLC.sln
+  - cd ./src/OpenDLC/OpenDLC.Tests/bin/Release/
+  - mono ../../../../../testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe OpenDLC.Tests.dll
