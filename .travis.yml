@@ -1,6 +1,7 @@
 language: csharp
 solution: ./src/OpenDLC/OpenDLC.sln
 install:
+  - sudo apt-get install mono-devel mono-gmcs nunit-console
   - nuget restore ./src/OpenDLC/OpenDLC.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
