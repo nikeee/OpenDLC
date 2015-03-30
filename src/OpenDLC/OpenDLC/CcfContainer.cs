@@ -64,7 +64,7 @@ namespace OpenDLC
             }
             using (var ms = new MemoryStream())
             {
-                await stream.CopyToAsync(ms);
+                await stream.CopyToAsync(ms).ConfigureAwait(false);
                 return FromBuffer(ms.ToArray());
             }
         }
