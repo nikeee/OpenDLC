@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -70,7 +71,45 @@ namespace OpenDLC
 #endif
         public static CcfContainer FromBuffer(byte[] buffer)
         {
+            Version ccfVersion;
+            var xml = DecryptXml(buffer, out ccfVersion);
+            if (xml == null)
+                throw new NotSupportedException("The CCF version is not supported.");
+
             throw new NotImplementedException();
+        }
+
+
+        private static string DecryptXml(byte[] data, out Version usedVersion)
+        {
+            const string MagicNumber = "<?xml";
+
+            using (var rij = new RijndaelManaged())
+            {
+                rij.Mode = CipherMode.CBC;
+                rij.Padding = PaddingMode.Zeros;
+
+                // There are more than one key. Just try them out.
+                for (int i = 0; i < Keys.Count; ++i)
+                {
+                    rij.IV = IVs[i];
+                    rij.Key = Keys[i];
+                    using (var dec = rij.CreateDecryptor())
+                    {
+                        var output = new byte[data.Length];
+                        dec.TransformBlock(data, 0, data.Length, output, 0);
+
+                        var xmlData = Encoding.UTF8.GetString(output);
+                        if (xmlData.StartsWith(MagicNumber))
+                        {
+                            usedVersion = Versions[i];
+                            return xmlData;
+                        }
+                    }
+                }
+            }
+            usedVersion = null;
+            return null; // Failed to decrypt
         }
     }
 }
