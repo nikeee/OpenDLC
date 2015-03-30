@@ -12,6 +12,16 @@ namespace OpenDLC
     internal class CcfContainer : DlcContainer<CcfEntry>
     {
 
+        public string Name { get; set; }
+
+        // Put Comment & Password into "options" subtype?
+        public string Comment { get; set; }
+        public string Password { get; set; }
+        // Service?
+
+
+        #region crypto
+
         private static readonly ReadOnlyCollection<byte[]> Keys = new ReadOnlyCollection<byte[]>(new[]
         {
             new byte[] {0x5F, 0x67, 0x9C, 0x00, 0x54, 0x87, 0x37, 0xE1, 0x20, 0xE6, 0x51, 0x8A, 0x98, 0x1B, 0xD0, 0xBA, 0x11, 0xAF, 0x5C, 0x71, 0x9E, 0x97, 0x50, 0x29, 0x83, 0xAD, 0x6A, 0xA3, 0x8E, 0xD7, 0x21, 0xC3},
@@ -30,6 +40,8 @@ namespace OpenDLC
             new Version(0, 8),
             new Version(0, 7)
         });
+
+        #endregion
 
         public static CcfContainer FromFile(string fileName)
         {
