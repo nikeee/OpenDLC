@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OpenDLC
 {
@@ -28,6 +30,47 @@ namespace OpenDLC
             new Version(0, 7)
         });
 
+        public static CcfContainer FromFile(string fileName)
+        {
+            var buffer = File.ReadAllBytes(fileName);
+            return FromBuffer(buffer);
+        }
 
+#if FEATURE_TAP
+        public static async Task<CcfContainer> FromFileAsync(string fileName)
+        {
+            using (var f = File.OpenRead(fileName))
+                return await FromStreamAsync(f).ConfigureAwait(false);
+        }
+#endif
+        public static CcfContainer FromStream(Stream stream)
+        {
+            using (var ms = new MemoryStream())
+            {
+                stream.CopyTo(ms);
+                return FromBuffer(ms.ToArray());
+            }
+        }
+
+#if FEATURE_TAP
+        public static async Task<CcfContainer> FromStreamAsync(Stream stream)
+        {
+            var alreadyMs = stream as MemoryStream;
+            if (alreadyMs != null)
+            {
+                var res = FromBuffer(alreadyMs.ToArray());
+                return res;
+            }
+            using (var ms = new MemoryStream())
+            {
+                await stream.CopyToAsync(ms);
+                return FromBuffer(ms.ToArray());
+            }
+        }
+#endif
+        public static CcfContainer FromBuffer(byte[] buffer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

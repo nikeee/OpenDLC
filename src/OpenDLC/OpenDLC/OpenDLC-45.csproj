@@ -57,6 +57,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CcfContainer.cs" />
+    <Compile Include="CcfEntry.cs" />
     <Compile Include="ConvertEx.cs" />
     <Compile Include="DlcContainer.cs" />
     <Compile Include="DlcEntry.cs" />
