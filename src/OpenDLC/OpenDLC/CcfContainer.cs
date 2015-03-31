@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OpenDLC
 {
-    internal class CcfContainer : DlcContainer<CcfEntry>
+    public class CcfContainer : DlcContainer<CcfEntry>
     {
 
         public string Name { get; set; }
@@ -94,8 +94,6 @@ namespace OpenDLC
 
         private static string DecryptXml(byte[] data, out Version usedVersion)
         {
-            const string MagicNumber = "<?xml";
-
             using (var rij = new RijndaelManaged())
             {
                 rij.Mode = CipherMode.CBC;
@@ -112,7 +110,7 @@ namespace OpenDLC
                         dec.TransformBlock(data, 0, data.Length, output, 0);
 
                         var xmlData = Encoding.UTF8.GetString(output);
-                        if (xmlData.StartsWith(MagicNumber))
+                        if (IsValidContainerXml(xmlData))
                         {
                             usedVersion = Versions[i];
                             return xmlData;
@@ -122,6 +120,21 @@ namespace OpenDLC
             }
             usedVersion = null;
             return null; // Failed to decrypt
+        }
+
+        private static bool IsValidContainerXml(string data)
+        {
+            const string Identifier = "<CryptLoad>";
+            return data.Contains(Identifier, StringComparison.InvariantCultureIgnoreCase);
+
+        }
+    }
+
+    internal static class StringExtensions
+    {
+        public static bool Contains(this string value, string needle, StringComparison comparisonType)
+        {
+            return value.IndexOf(needle, comparisonType) > -1;
         }
     }
 }
