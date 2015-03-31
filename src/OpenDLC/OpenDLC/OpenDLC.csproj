@@ -51,11 +51,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CcfContainer.cs" />
     <Compile Include="CcfEntry.cs" />
     <Compile Include="ConvertEx.cs" />
+    <Compile Include="CryptloadContainer.cs" />
     <Compile Include="DlcContainer.cs" />
     <Compile Include="DlcEntry.cs" />
     <Compile Include="RsdfContainer.cs" />

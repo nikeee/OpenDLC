@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace OpenDLC
 {
@@ -87,10 +91,10 @@ namespace OpenDLC
             var xml = DecryptXml(buffer, out ccfVersion);
             if (xml == null)
                 throw new NotSupportedException("The CCF version is not supported.");
-
+            var contents = SerializeFromXml(xml);
+            Debugger.Break();
             throw new NotImplementedException();
         }
-
 
         private static string DecryptXml(byte[] data, out Version usedVersion)
         {
@@ -113,6 +117,7 @@ namespace OpenDLC
                         if (IsValidContainerXml(xmlData))
                         {
                             usedVersion = Versions[i];
+                            xmlData = xmlData.Remove(xmlData.IndexOf('\0')); /* lol */
                             return xmlData;
                         }
                     }
@@ -126,7 +131,24 @@ namespace OpenDLC
         {
             const string Identifier = "<CryptLoad>";
             return data.Contains(Identifier, StringComparison.InvariantCultureIgnoreCase);
+        }
 
+        private static readonly XmlSerializer _serializer = new XmlSerializer(typeof(CryptLoadContainer));
+        private static CryptLoadContainer SerializeFromXml(string xmlData)
+        {
+            var settings = new XmlReaderSettings
+            {
+                ConformanceLevel = ConformanceLevel.Fragment,
+                IgnoreWhitespace = true,
+                IgnoreComments = true
+            };
+            Debug.Assert(xmlData != null);
+            xmlData = xmlData.Trim();
+            using (var reader = new StringReader(xmlData))
+            using (var rr = XmlReader.Create(reader))
+            {
+                return _serializer.Deserialize(rr) as CryptLoadContainer;
+            }
         }
     }
 
