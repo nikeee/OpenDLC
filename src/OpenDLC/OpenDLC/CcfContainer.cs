@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,8 +19,8 @@ namespace OpenDLC
         // Put Comment & Password into "options" subtype?
         public string Comment { get; set; }
         public string Password { get; set; }
-        // Service?
-
+        public string Service { get; set; }
+        public string Url { get; set; }
 
         #region crypto
 
@@ -87,14 +85,35 @@ namespace OpenDLC
 #endif
         public static CcfContainer FromBuffer(byte[] buffer)
         {
+            // TODO: May handle multiple packages per CCF?
+
             Version ccfVersion;
             var xml = DecryptXml(buffer, out ccfVersion);
             if (xml == null)
                 throw new NotSupportedException("The CCF version is not supported.");
-            var contents = SerializeFromXml(xml);
 
-            Debugger.Break();
-            throw new NotImplementedException();
+            var contents = SerializeFromXml(xml);
+            if (contents == null || contents.Package == null)
+                throw new NotSupportedException("The CCF version is not supported.");
+
+            var resContainer = new CcfContainer();
+            resContainer.Name = contents.Package.Name;
+            resContainer.Password = contents.Package.Options.Passwort;
+            resContainer.Comment = contents.Package.Options.Kommentar;
+            resContainer.Url = contents.Package.Url;
+            resContainer.Service = contents.Package.Service;
+
+            if (!CollectionEx.IsNullOrEmpty(contents.Package.Downloads))
+            {
+                var dls = contents.Package.Downloads;
+                for (int i = 0; i < dls.Count; ++i)
+                {
+                    var currentDownload = dls[i];
+                    if (currentDownload != null)
+                        resContainer.Add(new CcfEntry(currentDownload));
+                }
+            }
+            return resContainer;
         }
 
         private static string DecryptXml(byte[] data, out Version usedVersion)
@@ -164,6 +183,16 @@ namespace OpenDLC
         public static bool Contains(this string value, string needle, StringComparison comparisonType)
         {
             return value.IndexOf(needle, comparisonType) > -1;
+        }
+    }
+
+    internal static class CollectionEx
+    {
+        public static bool IsNullOrEmpty<T>(ICollection<T> collection)
+        {
+            if (collection == null)
+                return true;
+            return collection.Count == 0;
         }
     }
 }

@@ -1,4 +1,6 @@
 
+using System.Diagnostics;
+
 namespace OpenDLC
 {
     public class CcfEntry : DlcEntry
@@ -11,6 +13,20 @@ namespace OpenDLC
         {
             FileSize = fileSize;
             FileName = fileName;
+        }
+
+        internal CcfEntry(CcfDownload ccfDownload)
+            :  base(ccfDownload.Url)
+        {
+            Debug.Assert(ccfDownload != null);
+            // ccfDownload = ccfDownload;
+
+            ulong fsize;
+            if (ulong.TryParse(ccfDownload.FileSize, out fsize))
+                FileSize = fsize;
+            FileName = ccfDownload.FileName;
+
+            //TODO:  ccfDownload.UrlAttribute?
         }
 
         public static implicit operator string(CcfEntry value)

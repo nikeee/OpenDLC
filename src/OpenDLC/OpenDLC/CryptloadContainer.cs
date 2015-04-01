@@ -30,7 +30,7 @@ namespace OpenDLC
         public string Url { get; set; }
 
         [XmlAttribute(AttributeName = "Url", Namespace = "")]
-        public string _Url { get; set; }
+        public string UrlAttribute { get; set; }
 
         [XmlElement(ElementName = "FileName", Namespace = "")]
         [DataMember]
