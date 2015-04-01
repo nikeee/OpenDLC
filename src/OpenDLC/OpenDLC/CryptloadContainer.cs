@@ -5,6 +5,8 @@ using System.Xml.Serialization;
 
 namespace OpenDLC
 {
+    // TODO: Make all this internal since it's only used for serialization
+
     [XmlRoot(ElementName = "Options", Namespace = "")]
     [DataContract(Name = "Options", Namespace = "")]
     public class CcfOptions
