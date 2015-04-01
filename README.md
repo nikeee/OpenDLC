@@ -9,6 +9,28 @@ var container = await RsdfContainer.FromFileAsync(pathToFile);
 Console.WriteLine("All link in this file:");
 foreach(RsdfEntry currentLink in container)
 {
-	Console.WriteLine(currentLink);
+    Console.WriteLine(currentLink);
+}
+```
+
+# CCF
+```C#
+var container = await CcfContainer.FromFileAsync(pathToFile);
+Console.WriteLine("All link in this file:");
+foreach(CcfEntry currentLink in container)
+{
+    Console.WriteLine(currentLink);
+}
+```
+
+Pretty much the same. You can even join the links together.
+```C#
+var someRsdf = await RsdfContainer.FromFileAsync(pathToFile);
+var someCcf = await CcfContainer.FromFileAsync(pathToFile);
+IEnumerable<DlcEntry> allLinks = someRsdf.Concat(someCcf);
+Console.WriteLine("All links in CCF/RSDF:");
+foreach(DlcEntry currentLink in allLinks)
+{
+    Console.WriteLine(currentLink);
 }
 ```
