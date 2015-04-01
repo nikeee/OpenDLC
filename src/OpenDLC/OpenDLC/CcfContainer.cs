@@ -92,6 +92,7 @@ namespace OpenDLC
             if (xml == null)
                 throw new NotSupportedException("The CCF version is not supported.");
             var contents = SerializeFromXml(xml);
+
             Debugger.Break();
             throw new NotImplementedException();
         }
@@ -111,13 +112,19 @@ namespace OpenDLC
                     using (var dec = rij.CreateDecryptor())
                     {
                         var output = new byte[data.Length];
-                        dec.TransformBlock(data, 0, data.Length, output, 0);
+                        var written = dec.TransformBlock(data, 0, data.Length, output, 0);
 
-                        var xmlData = Encoding.UTF8.GetString(output);
+                        var outputResized = new byte[written];
+                        Buffer.BlockCopy(output, 0, outputResized, 0, written);
+
+                        var xmlData = Encoding.UTF8.GetString(outputResized);
+
+                        Debug.Assert(xmlData != null);
+                        Debug.Assert(xmlData[xmlData.Length - 1] != '\0');
+
                         if (IsValidContainerXml(xmlData))
                         {
                             usedVersion = Versions[i];
-                            xmlData = xmlData.Remove(xmlData.IndexOf('\0')); /* lol */
                             return xmlData;
                         }
                     }
