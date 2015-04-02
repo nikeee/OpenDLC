@@ -30,9 +30,9 @@ Pretty much the same. You can even join the links together.
 ```C#
 var someRsdf = await RsdfContainer.FromFileAsync(pathToFile);
 var someCcf = await CcfContainer.FromFileAsync(pathToFile);
-IEnumerable<DlcEntry> allLinks = someRsdf.Concat(someCcf.Packages.Concat());
+IEnumerable<DownloadEntry> allLinks = someRsdf.Concat(someCcf.Packages.Concat());
 Console.WriteLine("All links in CCF/RSDF:");
-foreach(DlcEntry currentLink in allLinks)
+foreach(DownloadEntry currentLink in allLinks)
 {
     Console.WriteLine(currentLink);
 }
