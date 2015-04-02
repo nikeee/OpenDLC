@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -80,7 +81,43 @@ namespace OpenDLC
 
         public string SaveAsString()
         {
-            throw new NotImplementedException();
+            const bool useCcfPrefix = false;
+            using (var enc = Rijndael.CreateEncryptor(Key, IV))
+            {
+                var lines = this.Select(entry => entry.Url).ToArray();
+
+                var sb = new StringBuilder();
+                var outputBuffer = new byte[4096];
+
+                for (int i = 0; i < lines.Length; ++i)
+                {
+                    var currentLink = lines[i];
+                    if (string.IsNullOrEmpty(currentLink))
+                        continue;
+
+                    if (useCcfPrefix) // TODO: May remove
+                        currentLink = "CCF: " + currentLink;
+
+                    var linkBytes = Encoding.UTF8.GetBytes(currentLink);
+                    var written = enc.TransformBlock(linkBytes, 0, linkBytes.Length, outputBuffer, 0);
+                    var sizedOutput = new byte[written];
+                    Buffer.BlockCopy(outputBuffer, 0, sizedOutput, 0, written);
+
+                    var b64 = Convert.ToBase64String(sizedOutput);
+
+                    sb.Append(b64).Append("\r\n");
+                }
+                var unencodedData = Encoding.UTF8.GetBytes(sb.ToString());
+                Debug.Assert(unencodedData != null);
+                Debug.Assert(unencodedData.Length > 0);
+
+                var res = ConvertEx.ToHexString(unencodedData);
+
+                Debug.Assert(res != null);
+                Debug.Assert(res.Length == unencodedData.Length * 2);
+
+                return res;
+            }
         }
 
         private static RsdfContainer DecryptData(byte[] data)
