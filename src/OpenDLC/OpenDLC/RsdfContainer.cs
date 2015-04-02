@@ -74,9 +74,44 @@ namespace OpenDLC
             if ((value.Length & 1) != 0)
                 throw new ArgumentException("Invalid RSDF data");
 
-
             var data = ConvertEx.FromHexString(value);
             return DecryptData(data);
+        }
+#if FEATURE_TAP
+        public async Task SaveToFileAsync(string fileName)
+        {
+            using (var fs = File.OpenWrite(fileName))
+                await SaveToStreamAsync(fs).ConfigureAwait(false);
+        }
+#endif
+        public void SaveToFile(string fileName)
+        {
+            using (var fs = File.OpenWrite(fileName))
+                SaveToStream(fs);
+        }
+
+#if FEATURE_TAP
+        public async Task SaveToStreamAsync(Stream stream)
+        {
+            var ms = stream as MemoryStream;
+            if (ms != null)
+            {
+                SaveToStream(ms);
+                return;
+            }
+            var str = SaveAsString();
+            Debug.Assert(!string.IsNullOrWhiteSpace(str));
+            var stringBuffer = Encoding.UTF8.GetBytes(str);
+            await stream.WriteAsync(stringBuffer, 0, stringBuffer.Length).ConfigureAwait(false);
+        }
+#endif
+
+        public void SaveToStream(Stream stream)
+        {
+            var str = SaveAsString();
+            Debug.Assert(!string.IsNullOrWhiteSpace(str));
+            var stringBuffer = Encoding.UTF8.GetBytes(str);
+            stream.Write(stringBuffer, 0, stringBuffer.Length);
         }
 
         public string SaveAsString()
@@ -113,7 +148,7 @@ namespace OpenDLC
 
                 var res = ConvertEx.ToHexString(unencodedData);
 
-                Debug.Assert(res != null);
+                Debug.Assert(!string.IsNullOrWhiteSpace(res));
                 Debug.Assert(res.Length == unencodedData.Length * 2);
 
                 return res;
