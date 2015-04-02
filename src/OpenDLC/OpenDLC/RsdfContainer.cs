@@ -78,6 +78,11 @@ namespace OpenDLC
             return DecryptData(data);
         }
 
+        public string SaveAsString()
+        {
+            throw new NotImplementedException();
+        }
+
         private static RsdfContainer DecryptData(byte[] data)
         {
             string dataStr = Encoding.UTF8.GetString(data);
