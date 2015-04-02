@@ -77,21 +77,17 @@ namespace OpenDLC
             var data = ConvertEx.FromHexString(value);
             return DecryptData(data);
         }
-#if FEATURE_TAP
-        public async Task SaveToFileAsync(string fileName)
+
+        public override void SaveToStream(Stream stream)
         {
-            using (var fs = File.OpenWrite(fileName))
-                await SaveToStreamAsync(fs).ConfigureAwait(false);
-        }
-#endif
-        public void SaveToFile(string fileName)
-        {
-            using (var fs = File.OpenWrite(fileName))
-                SaveToStream(fs);
+            var str = SaveAsString();
+            Debug.Assert(!string.IsNullOrWhiteSpace(str));
+            var stringBuffer = Encoding.UTF8.GetBytes(str);
+            stream.Write(stringBuffer, 0, stringBuffer.Length);
         }
 
 #if FEATURE_TAP
-        public async Task SaveToStreamAsync(Stream stream)
+        public override async Task SaveToStreamAsync(Stream stream)
         {
             var ms = stream as MemoryStream;
             if (ms != null)
@@ -106,17 +102,8 @@ namespace OpenDLC
         }
 #endif
 
-        public void SaveToStream(Stream stream)
-        {
-            var str = SaveAsString();
-            Debug.Assert(!string.IsNullOrWhiteSpace(str));
-            var stringBuffer = Encoding.UTF8.GetBytes(str);
-            stream.Write(stringBuffer, 0, stringBuffer.Length);
-        }
-
         public string SaveAsString()
         {
-            const bool useCcfPrefix = false;
             using (var enc = Rijndael.CreateEncryptor(Key, IV))
             {
                 var lines = this.Select(entry => entry.Url).ToArray();
@@ -129,9 +116,6 @@ namespace OpenDLC
                     var currentLink = lines[i];
                     if (string.IsNullOrEmpty(currentLink))
                         continue;
-
-                    if (useCcfPrefix) // TODO: May remove
-                        currentLink = "CCF: " + currentLink;
 
                     var linkBytes = Encoding.UTF8.GetBytes(currentLink);
                     var written = enc.TransformBlock(linkBytes, 0, linkBytes.Length, outputBuffer, 0);
