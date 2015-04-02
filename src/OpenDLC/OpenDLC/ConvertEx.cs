@@ -5,28 +5,32 @@ namespace OpenDLC
 {
     internal class ConvertEx
     {
-        internal static byte[] FromHexString(string data)
+        internal static string ToHexString(byte[] value)
         {
-            if (data == null)
+            return BitConverter.ToString(value).Replace("-", "");
+        }
+        internal static byte[] FromHexString(string value)
+        {
+            if (value == null)
                 return null;
 
-            data = data.Trim();
-            if (data.Length == 0)
+            value = value.Trim();
+            if (value.Length == 0)
                 return new byte[0];
 
-            if ((data.Length & 1) != 0)
+            if ((value.Length & 1) != 0)
                 throw new FormatException("The length of data, ignoring white-space characters, is not zero or a multiple of 2.");
 
-            Debug.Assert(data != null);
-            Debug.Assert(data.Length % 2 != 1);
+            Debug.Assert(value != null);
+            Debug.Assert(value.Length % 2 != 1);
 
-            data = data.ToUpperInvariant();
+            value = value.ToUpperInvariant();
 
-            byte[] res = new byte[data.Length >> 1];
+            byte[] res = new byte[value.Length >> 1];
 
-            for (int i = 0; i < data.Length >> 1; ++i)
+            for (int i = 0; i < value.Length >> 1; ++i)
             {
-                res[i] = (byte)((GetHexValue(data[i << 1]) << 4) + (GetHexValue(data[(i << 1) + 1])));
+                res[i] = (byte)((GetHexValue(value[i << 1]) << 4) + (GetHexValue(value[(i << 1) + 1])));
             }
 
             return res;
@@ -35,8 +39,7 @@ namespace OpenDLC
         public static int GetHexValue(char hex)
         {
             // See: http://stackoverflow.com/a/9995303/785210
-            int val = hex;
-            return val - (val < 58 ? 48 : 55);
+            return hex - (hex < 58 ? 48 : 55);
         }
     }
 }

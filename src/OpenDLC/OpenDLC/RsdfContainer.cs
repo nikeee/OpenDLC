@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -73,9 +74,85 @@ namespace OpenDLC
             if ((value.Length & 1) != 0)
                 throw new ArgumentException("Invalid RSDF data");
 
-
             var data = ConvertEx.FromHexString(value);
             return DecryptData(data);
+        }
+#if FEATURE_TAP
+        public async Task SaveToFileAsync(string fileName)
+        {
+            using (var fs = File.OpenWrite(fileName))
+                await SaveToStreamAsync(fs).ConfigureAwait(false);
+        }
+#endif
+        public void SaveToFile(string fileName)
+        {
+            using (var fs = File.OpenWrite(fileName))
+                SaveToStream(fs);
+        }
+
+#if FEATURE_TAP
+        public async Task SaveToStreamAsync(Stream stream)
+        {
+            var ms = stream as MemoryStream;
+            if (ms != null)
+            {
+                SaveToStream(ms);
+                return;
+            }
+            var str = SaveAsString();
+            Debug.Assert(!string.IsNullOrWhiteSpace(str));
+            var stringBuffer = Encoding.UTF8.GetBytes(str);
+            await stream.WriteAsync(stringBuffer, 0, stringBuffer.Length).ConfigureAwait(false);
+        }
+#endif
+
+        public void SaveToStream(Stream stream)
+        {
+            var str = SaveAsString();
+            Debug.Assert(!string.IsNullOrWhiteSpace(str));
+            var stringBuffer = Encoding.UTF8.GetBytes(str);
+            stream.Write(stringBuffer, 0, stringBuffer.Length);
+        }
+
+        public string SaveAsString()
+        {
+            const bool useCcfPrefix = false;
+            using (var enc = Rijndael.CreateEncryptor(Key, IV))
+            {
+                var lines = this.Select(entry => entry.Url).ToArray();
+
+                var sb = new StringBuilder();
+                var outputBuffer = new byte[4096];
+
+                for (int i = 0; i < lines.Length; ++i)
+                {
+                    var currentLink = lines[i];
+                    if (string.IsNullOrEmpty(currentLink))
+                        continue;
+
+                    if (useCcfPrefix) // TODO: May remove
+                        currentLink = "CCF: " + currentLink;
+
+                    var linkBytes = Encoding.UTF8.GetBytes(currentLink);
+                    var written = enc.TransformBlock(linkBytes, 0, linkBytes.Length, outputBuffer, 0);
+                    var sizedOutput = new byte[written];
+                    Buffer.BlockCopy(outputBuffer, 0, sizedOutput, 0, written);
+
+                    var b64 = Convert.ToBase64String(sizedOutput);
+
+                    sb.Append(b64).Append("\r\n");
+                }
+                var unencodedData = Encoding.UTF8.GetBytes(sb.ToString());
+                Debug.Assert(unencodedData != null);
+                Debug.Assert(unencodedData.Length > 0);
+
+                var res = ConvertEx.ToHexString(unencodedData);
+
+                Debug.Assert(!string.IsNullOrWhiteSpace(res));
+                Debug.Assert(res.Length == unencodedData.Length * 2);
+
+                return res;
+            }
         }
 
         private static RsdfContainer DecryptData(byte[] data)
