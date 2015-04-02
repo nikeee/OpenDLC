@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using OpenDLC.Collections.Generic;
+using System.Diagnostics;
 
 namespace OpenDLC
 {

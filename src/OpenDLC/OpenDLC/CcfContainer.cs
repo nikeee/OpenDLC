@@ -94,7 +94,6 @@ namespace OpenDLC
                 var currentPackage = ps[i];
                 if (currentPackage != null)
                     resContainer.Add(new CcfPackage(currentPackage));
-
             }
 
             return resContainer;
@@ -159,24 +158,6 @@ namespace OpenDLC
             {
                 return _serializer.Deserialize(rr) as CryptLoadContainer;
             }
-        }
-    }
-
-    internal static class StringExtensions
-    {
-        public static bool Contains(this string value, string needle, StringComparison comparisonType)
-        {
-            return value.IndexOf(needle, comparisonType) > -1;
-        }
-    }
-
-    internal static class CollectionEx
-    {
-        public static bool IsNullOrEmpty<T>(ICollection<T> collection)
-        {
-            if (collection == null)
-                return true;
-            return collection.Count == 0;
         }
     }
 }
