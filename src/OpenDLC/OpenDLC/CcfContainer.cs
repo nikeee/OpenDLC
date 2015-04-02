@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -11,9 +10,8 @@ using System.Xml.Serialization;
 
 namespace OpenDLC
 {
-    public class CcfContainer : Collection<CcfPackage>
+    public class CcfContainer : DownloadContainer<CcfPackage>
     {
-
         #region crypto
 
         private static readonly ReadOnlyCollection<byte[]> Keys = new ReadOnlyCollection<byte[]>(new[]
@@ -159,5 +157,16 @@ namespace OpenDLC
                 return _serializer.Deserialize(rr) as CryptLoadContainer;
             }
         }
+
+        public override void SaveToStream(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+#if FEATURE_TAP
+        public override Task SaveToStreamAsync(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+#endif
     }
 }
