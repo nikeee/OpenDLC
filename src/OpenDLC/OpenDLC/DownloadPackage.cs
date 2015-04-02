@@ -1,7 +1,7 @@
 ﻿
 namespace OpenDLC
 {
-    public abstract class DownloadPackage<T> : DlcContainer<T> where T : DlcEntry
+    public abstract class DownloadPackage<T> : DownloadContainer<T> where T : DownloadEntry
     {
         // May be used for later abstraction
     }

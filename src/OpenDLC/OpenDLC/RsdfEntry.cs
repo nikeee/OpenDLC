@@ -1,6 +1,6 @@
 namespace OpenDLC
 {
-    public class RsdfEntry : DlcEntry
+    public class RsdfEntry : DownloadEntry
     {
         public RsdfEntry(string url)
             : base(url)

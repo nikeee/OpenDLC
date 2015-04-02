@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace OpenDLC
 {
-    public class CcfEntry : DlcEntry
+    public class CcfEntry : DownloadEntry
     {
         public ulong FileSize { get; set; }
         public string FileName { get; set; }

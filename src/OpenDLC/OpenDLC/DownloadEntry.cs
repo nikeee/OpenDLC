@@ -1,10 +1,10 @@
 ﻿namespace OpenDLC
 {
-    public abstract class DlcEntry
+    public abstract class DownloadEntry
     {
         public string Url { get; set; }
 
-        protected DlcEntry(string url)
+        protected DownloadEntry(string url)
         {
             Url = url;
         }

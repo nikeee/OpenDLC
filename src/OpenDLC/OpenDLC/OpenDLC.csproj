@@ -61,8 +61,8 @@
     <Compile Include="CollectionEx.cs" />
     <Compile Include="ConvertEx.cs" />
     <Compile Include="CryptloadContainer.cs" />
-    <Compile Include="DlcContainer.cs" />
-    <Compile Include="DlcEntry.cs" />
+    <Compile Include="DownloadContainer.cs" />
+    <Compile Include="DownloadEntry.cs" />
     <Compile Include="DownloadPackage.cs" />
     <Compile Include="RsdfContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
