@@ -37,6 +37,12 @@ namespace OpenDLC
 #endif
         public static RsdfContainer FromStream(Stream stream)
         {
+            var ms = stream as MemoryStream;
+            if (ms != null)
+            {
+                var str = Encoding.UTF8.GetString(ms.ToArray());
+                return FromString(str);
+            }
             using (var reader = new StreamReader(stream))
                 return FromString(reader.ReadToEnd());
         }
@@ -44,6 +50,12 @@ namespace OpenDLC
 #if FEATURE_TAP
         public static async Task<RsdfContainer> FromStreamAsync(Stream stream)
         {
+            var ms = stream as MemoryStream;
+            if (ms != null)
+            {
+                var str = Encoding.UTF8.GetString(ms.ToArray());
+                return FromString(str);
+            }
             using (var reader = new StreamReader(stream))
             {
                 var stringValue = await reader.ReadToEndAsync().ConfigureAwait(false);
