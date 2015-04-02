@@ -41,7 +41,7 @@ namespace OpenDLC
 
     [XmlRoot(ElementName = "Package", Namespace = "")]
     [DataContract(Name = "Package", Namespace = "")]
-    public class CcfPackage
+    public class CcfPackageItem
     {
         [XmlElement(ElementName = "Options", Namespace = "")]
         public CcfOptions Options { get; set; }
@@ -65,6 +65,6 @@ namespace OpenDLC
     {
         [XmlElement(ElementName = "Package", Namespace = "")]
         [DataMember]
-        public CcfPackage Package { get; set; }
+        public List<CcfPackageItem> Packages { get; set; }
     }
 }
