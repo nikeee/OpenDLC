@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="CcfContainer.cs" />
     <Compile Include="CcfEntry.cs" />
+    <Compile Include="CcfFormat.cs" />
     <Compile Include="CcfPackage.cs" />
     <Compile Include="CollectionEx.cs" />
     <Compile Include="ConvertEx.cs" />
