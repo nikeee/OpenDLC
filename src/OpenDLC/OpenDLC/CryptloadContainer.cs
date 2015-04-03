@@ -88,11 +88,7 @@ namespace OpenDLC
 
             res.Downloads = new List<CcfDownload>();
             for (int i = 0; i < package.Count; ++i)
-            {
-                var item = CcfDownload.FromCcfEntry(package[i]);
-                Debug.Assert(item != null);
-                res.Downloads.Add(item);
-            }
+                res.Downloads.Add(CcfDownload.FromCcfEntry(package[i]));
 
             return res;
         }
@@ -113,11 +109,7 @@ namespace OpenDLC
             var c = new CryptLoadContainer();
             c.Packages = new List<CcfPackageItem>();
             for (int i = 0; i < container.Count; ++i)
-            {
-                var package = container[i];
-                Debug.Assert(package != null);
-                c.Packages.Add(CcfPackageItem.FromCcfPackage(package));
-            }
+                c.Packages.Add(CcfPackageItem.FromCcfPackage(container[i]));
             return c;
         }
     }
