@@ -230,6 +230,13 @@ namespace OpenDLC
             }
         }
 
+        private static XmlWriterSettings _writerSettings = new XmlWriterSettings
+        {
+            Encoding = new UTF8Encoding(false),
+            Indent = false,
+            OmitXmlDeclaration = true
+        };
+
         private byte[] SerializeToXml()
         {
             var serCon = ToCryptLoadContainer();
@@ -238,12 +245,7 @@ namespace OpenDLC
                 XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
                 namespaces.Add(string.Empty, string.Empty); // No namespaces because the others don't do it as well
 
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Encoding = Encoding.UTF8; // new UnicodeEncoding(false, false); // no BOM in a .NET string
-                settings.Indent = false;
-                settings.OmitXmlDeclaration = false;
-
-                using (var ww = XmlWriter.Create(ms, settings))
+                using (var ww = XmlWriter.Create(ms, _writerSettings))
                     _serializer.Serialize(ww, serCon, namespaces);
 
                 return ms.ToArray();
