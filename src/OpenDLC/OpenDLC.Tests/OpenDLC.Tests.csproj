@@ -53,6 +53,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CcfContainerTests.cs" />
     <Compile Include="TestResources.cs" />
     <Compile Include="RsdfContainerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
