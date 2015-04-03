@@ -204,5 +204,17 @@ namespace OpenDLC.Tests
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromStream(null));
             Assert.Throws<ArgumentNullException>(async () => await CcfContainer.FromStreamAsync(null));
         }
+
+        [Test]
+        public void SaveWithNullArgument()
+        {
+            var c = new CcfContainer();
+            Assert.Throws<ArgumentNullException>(() => c.SaveToFile(null));
+            Assert.Throws<ArgumentNullException>(() => c.SaveToFile(string.Empty));
+            Assert.Throws<ArgumentNullException>(async () => await c.SaveToFileAsync(null));
+            Assert.Throws<ArgumentNullException>(async () => await c.SaveToFileAsync(string.Empty));
+            Assert.Throws<ArgumentNullException>(() => c.SaveToStream(null));
+            Assert.Throws<ArgumentNullException>(async () => await c.SaveToStreamAsync(null));
+        }
     }
 }
