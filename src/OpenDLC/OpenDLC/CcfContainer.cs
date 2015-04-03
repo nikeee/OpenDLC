@@ -119,6 +119,18 @@ namespace OpenDLC
 
                         var xmlData = Encoding.UTF8.GetString(outputResized);
 
+                        if (xmlData[xmlData.Length - 1] == '\0')
+                        {
+                            // Fallback for some hosters putting a \0 at the end
+                            int nullCount = 0;
+                            while (xmlData[xmlData.Length - nullCount - 1] == '\0' && nullCount < xmlData.Length)
+                                ++nullCount;
+
+                            Debug.Assert(nullCount < xmlData.Length);
+                            xmlData = xmlData.Remove(xmlData.Length - nullCount);
+                            Debug.Assert(xmlData.Length > 0);
+                        }
+
                         Debug.Assert(xmlData != null);
                         Debug.Assert(xmlData[xmlData.Length - 1] != '\0');
 
