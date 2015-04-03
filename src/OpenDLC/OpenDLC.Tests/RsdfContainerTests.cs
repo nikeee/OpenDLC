@@ -73,5 +73,30 @@ namespace OpenDLC.Tests
             Assert.That(containerString, Is.Not.Null);
             Assert.AreEqual(destContainer, containerString);
         }
+
+        [Test]
+        public void FromWithNullArgument()
+        {
+            Assert.Throws<ArgumentNullException>(() => RsdfContainer.FromString(null));
+            Assert.Throws<ArgumentNullException>(() => RsdfContainer.FromString(string.Empty));
+            Assert.Throws<ArgumentNullException>(() => RsdfContainer.FromFile(null));
+            Assert.Throws<ArgumentNullException>(() => RsdfContainer.FromFile(string.Empty));
+            Assert.Throws<ArgumentNullException>(async () => await RsdfContainer.FromFileAsync(null));
+            Assert.Throws<ArgumentNullException>(async () => await RsdfContainer.FromFileAsync(string.Empty));
+            Assert.Throws<ArgumentNullException>(() => RsdfContainer.FromStream(null));
+            Assert.Throws<ArgumentNullException>(async () => await RsdfContainer.FromStreamAsync(null));
+        }
+
+        [Test]
+        public void SaveWithNullArgument()
+        {
+            var c = new RsdfContainer();
+            Assert.Throws<ArgumentNullException>(() => c.SaveToFile(null));
+            Assert.Throws<ArgumentNullException>(() => c.SaveToFile(string.Empty));
+            Assert.Throws<ArgumentNullException>(async () => await c.SaveToFileAsync(null));
+            Assert.Throws<ArgumentNullException>(async () => await c.SaveToFileAsync(string.Empty));
+            Assert.Throws<ArgumentNullException>(() => c.SaveToStream(null));
+            Assert.Throws<ArgumentNullException>(async () => await c.SaveToStreamAsync(null));
+        }
     }
 }

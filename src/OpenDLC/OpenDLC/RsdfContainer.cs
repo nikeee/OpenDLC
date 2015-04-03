@@ -25,6 +25,9 @@ namespace OpenDLC
 
         public static RsdfContainer FromFile(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
+
             using (var f = File.OpenRead(fileName))
                 return FromStream(f);
         }
@@ -32,12 +35,18 @@ namespace OpenDLC
 #if FEATURE_TAP
         public static async Task<RsdfContainer> FromFileAsync(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
+
             using (var f = File.OpenRead(fileName))
                 return await FromStreamAsync(f).ConfigureAwait(false);
         }
 #endif
         public static RsdfContainer FromStream(Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+
             var ms = stream as MemoryStream;
             if (ms != null)
             {
@@ -51,6 +60,9 @@ namespace OpenDLC
 #if FEATURE_TAP
         public static async Task<RsdfContainer> FromStreamAsync(Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+
             var ms = stream as MemoryStream;
             if (ms != null)
             {
@@ -67,7 +79,7 @@ namespace OpenDLC
 
         public static RsdfContainer FromString(string value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
                 throw new ArgumentNullException();
 
             value = value.Trim();
@@ -80,6 +92,9 @@ namespace OpenDLC
 
         public override void SaveToStream(Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+
             var str = SaveAsString();
             Debug.Assert(!string.IsNullOrWhiteSpace(str));
             var stringBuffer = Encoding.UTF8.GetBytes(str);
@@ -89,6 +104,9 @@ namespace OpenDLC
 #if FEATURE_TAP
         public override async Task SaveToStreamAsync(Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+
             var ms = stream as MemoryStream;
             if (ms != null)
             {
