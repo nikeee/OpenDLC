@@ -52,10 +52,15 @@ namespace OpenDLC
 #endif
         public static CcfContainer FromStream(Stream stream)
         {
-            using (var ms = new MemoryStream())
+            var ms = stream as MemoryStream;
+            if (ms != null)
             {
-                stream.CopyTo(ms);
                 return FromBuffer(ms.ToArray());
+            }
+            using (var newMs = new MemoryStream())
+            {
+                stream.CopyTo(newMs);
+                return FromBuffer(newMs.ToArray());
             }
         }
 
@@ -135,21 +140,23 @@ namespace OpenDLC
         {
             const int version10KeyIndex = 0;
 
-            var xmlData = SerializeToXml();
-            var xmlDataBytes = Encoding.UTF8.GetBytes(xmlData);
+            //var xmlData = SerializeToXml();
+            var xmlDataBytes = SerializeToXml(); //= Encoding.UTF8.GetBytes(xmlData);
 
-            Debug.Assert(!string.IsNullOrEmpty(xmlData));
+            // Debug.Assert(!string.IsNullOrEmpty(xmlData));
             using (var rij = CreateRijndael())
             {
                 rij.IV = IVs[version10KeyIndex];
                 rij.Key = Keys[version10KeyIndex];
                 using (var enc = rij.CreateEncryptor())
                 {
-                    var output = new byte[xmlData.Length];
-                    var written = enc.TransformBlock(xmlDataBytes, 0, xmlDataBytes.Length, output, 0);
+                    //var output = new byte[xmlDataBytes.Length * 2];
+                    //var written = enc.TransformBlock(xmlDataBytes, 0, xmlDataBytes.Length, output, 0);
 
-                    var outputResized = new byte[written];
-                    Buffer.BlockCopy(output, 0, outputResized, 0, written);
+                    //var outputResized = new byte[written];
+                    //Buffer.BlockCopy(output, 0, outputResized, 0, written);
+
+                    var outputResized = enc.TransformFinalBlock(xmlDataBytes, 0, xmlDataBytes.Length);
 
                     Debug.Assert(outputResized.Length != 0);
 
@@ -206,7 +213,7 @@ namespace OpenDLC
 
         private static bool IsValidContainerXml(string data)
         {
-            const string Identifier = "<CryptLoad>";
+            const string Identifier = "<CryptLoad";
             return data.Contains(Identifier, StringComparison.InvariantCultureIgnoreCase);
         }
 
@@ -223,13 +230,39 @@ namespace OpenDLC
             }
         }
 
-        private string SerializeToXml()
+        private byte[] SerializeToXml()
         {
-            var sb = new StringBuilder();
-            using (var writer = new StringWriter(sb))
-            using (var ww = XmlWriter.Create(writer))
-                _serializer.Serialize(ww, this);
-            return sb.ToString();
+            var serCon = ToCryptLoadContainer();
+            using (var ms = new MemoryStream())
+            {
+                XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+                namespaces.Add(string.Empty, string.Empty); // No namespaces because the others don't do it as well
+
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Encoding = Encoding.UTF8; // new UnicodeEncoding(false, false); // no BOM in a .NET string
+                settings.Indent = false;
+                settings.OmitXmlDeclaration = false;
+
+                using (var ww = XmlWriter.Create(ms, settings))
+                    _serializer.Serialize(ww, serCon, namespaces);
+
+                return ms.ToArray();
+                //return Encoding.UTF8.GetString(ms.ToArray());
+            }
+        }
+
+        internal CryptLoadContainer ToCryptLoadContainer()
+        {
+            // TODO: Move to CryptLoadContainer class as static function
+            var c = new CryptLoadContainer();
+            c.Packages = new System.Collections.Generic.List<CcfPackageItem>();
+            for (int i = 0; i < Count; ++i)
+            {
+                var package = this[i];
+                Debug.Assert(package != null);
+                c.Packages.Add(package.ToPackageItem());
+            }
+            return c;
         }
     }
 }

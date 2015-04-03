@@ -15,7 +15,7 @@ namespace OpenDLC
         }
 
         internal CcfEntry(CcfDownload ccfDownload)
-            :  base(ccfDownload.Url)
+            : base(ccfDownload.Url)
         {
             Debug.Assert(ccfDownload != null);
             // ccfDownload = ccfDownload;
@@ -28,7 +28,18 @@ namespace OpenDLC
             //TODO:  ccfDownload.UrlAttribute?
         }
 
-        public static implicit operator string(CcfEntry value)
+        internal CcfDownload ToCcfDownload()
+        {
+            return new CcfDownload
+            {
+                Url = Url,
+                UrlAttribute = Url,
+                FileName = FileName,
+                FileSize = FileSize.ToString()
+            };
+        }
+
+        public static implicit operator string (CcfEntry value)
         {
             // TODO: Remove this implicit conversion?
             return value == null ? null : value.Url;

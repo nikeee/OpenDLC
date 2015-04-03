@@ -13,6 +13,11 @@ namespace OpenDLC
         public string Service { get; set; }
         public string Url { get; set; }
 
+        public CcfPackage()
+        {
+            // Nothing?
+        }
+
         internal CcfPackage(CcfPackageItem item)
         {
             Debug.Assert(item != null);
@@ -32,6 +37,31 @@ namespace OpenDLC
                         Add(new CcfEntry(currentDownload));
                 }
             }
+        }
+
+        internal CcfPackageItem ToPackageItem()
+        {
+            var res = new CcfPackageItem
+            {
+                Name = Name,
+                Options = new CcfOptions
+                {
+                    Kommentar = Comment,
+                    Passwort = Password
+                },
+                Service = Service,
+                Url = Url
+            };
+
+            res.Downloads = new System.Collections.Generic.List<CcfDownload>();
+            for (int i = 0; i < Count; ++i)
+            {
+                var item = this[i].ToCcfDownload();
+                Debug.Assert(item != null);
+                res.Downloads.Add(item);
+            }
+
+            return res;
         }
     }
 }
