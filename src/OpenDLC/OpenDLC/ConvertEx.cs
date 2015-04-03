@@ -36,7 +36,7 @@ namespace OpenDLC
             return res;
         }
 
-        public static int GetHexValue(char hex)
+        private static int GetHexValue(char hex)
         {
             // See: http://stackoverflow.com/a/9995303/785210
             return hex - (hex < 58 ? 48 : 55);
