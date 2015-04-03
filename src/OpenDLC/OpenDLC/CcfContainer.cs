@@ -70,8 +70,7 @@ namespace OpenDLC
             var alreadyMs = stream as MemoryStream;
             if (alreadyMs != null)
             {
-                var res = FromBuffer(alreadyMs.ToArray());
-                return res;
+                return FromBuffer(alreadyMs.ToArray());
             }
             using (var ms = new MemoryStream())
             {
@@ -140,22 +139,13 @@ namespace OpenDLC
         {
             const int version10KeyIndex = 0;
 
-            //var xmlData = SerializeToXml();
-            var xmlDataBytes = SerializeToXml(); //= Encoding.UTF8.GetBytes(xmlData);
-
-            // Debug.Assert(!string.IsNullOrEmpty(xmlData));
+            var xmlDataBytes = SerializeToXml();
             using (var rij = CreateRijndael())
             {
                 rij.IV = IVs[version10KeyIndex];
                 rij.Key = Keys[version10KeyIndex];
                 using (var enc = rij.CreateEncryptor())
                 {
-                    //var output = new byte[xmlDataBytes.Length * 2];
-                    //var written = enc.TransformBlock(xmlDataBytes, 0, xmlDataBytes.Length, output, 0);
-
-                    //var outputResized = new byte[written];
-                    //Buffer.BlockCopy(output, 0, outputResized, 0, written);
-
                     var outputResized = enc.TransformFinalBlock(xmlDataBytes, 0, xmlDataBytes.Length);
 
                     Debug.Assert(outputResized.Length != 0);
@@ -169,14 +159,14 @@ namespace OpenDLC
         {
             using (var rij = CreateRijndael())
             {
-                // There are more than one key. Just try them out.
+                var output = new byte[4096];
+                // There is more than one key. Just try them out.
                 for (int i = 0; i < Keys.Count; ++i)
                 {
                     rij.IV = IVs[i];
                     rij.Key = Keys[i];
                     using (var dec = rij.CreateDecryptor())
                     {
-                        var output = new byte[data.Length];
                         var written = dec.TransformBlock(data, 0, data.Length, output, 0);
 
                         var outputResized = new byte[written];
@@ -186,13 +176,8 @@ namespace OpenDLC
 
                         if (xmlData[xmlData.Length - 1] == '\0')
                         {
-                            // Fallback for some hosters putting a \0 at the end
-                            int nullCount = 0;
-                            while (xmlData[xmlData.Length - nullCount - 1] == '\0' && nullCount < xmlData.Length)
-                                ++nullCount;
-
-                            Debug.Assert(nullCount < xmlData.Length);
-                            xmlData = xmlData.Remove(xmlData.Length - nullCount);
+                            // Fallback for \0 padding
+                            xmlData = xmlData.Remove(xmlData.IndexOf('\0'));
                             Debug.Assert(xmlData.Length > 0);
                         }
 
@@ -239,7 +224,7 @@ namespace OpenDLC
 
         private byte[] SerializeToXml()
         {
-            var serCon = ToCryptLoadContainer();
+            var serCon = CryptLoadContainer.FromCcfContainer(this);
             using (var ms = new MemoryStream())
             {
                 XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
@@ -249,22 +234,7 @@ namespace OpenDLC
                     _serializer.Serialize(ww, serCon, namespaces);
 
                 return ms.ToArray();
-                //return Encoding.UTF8.GetString(ms.ToArray());
             }
-        }
-
-        internal CryptLoadContainer ToCryptLoadContainer()
-        {
-            // TODO: Move to CryptLoadContainer class as static function
-            var c = new CryptLoadContainer();
-            c.Packages = new System.Collections.Generic.List<CcfPackageItem>();
-            for (int i = 0; i < Count; ++i)
-            {
-                var package = this[i];
-                Debug.Assert(package != null);
-                c.Packages.Add(package.ToPackageItem());
-            }
-            return c;
         }
     }
 }

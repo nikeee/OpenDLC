@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
@@ -37,6 +38,17 @@ namespace OpenDLC
         [XmlElement(ElementName = "FileName", Namespace = "")]
         [DataMember]
         public string FileName { get; set; }
+
+        internal static CcfDownload FromCcfEntry(CcfEntry entry)
+        {
+            return new CcfDownload
+            {
+                Url = entry.Url,
+                UrlAttribute = entry.Url,
+                FileName = entry.FileName,
+                FileSize = entry.FileSize.ToString()
+            };
+        }
     }
 
     [XmlRoot(ElementName = "Package", Namespace = "")]
@@ -57,6 +69,33 @@ namespace OpenDLC
 
         [XmlAttribute(AttributeName = "url", Namespace = "")]
         public string Url { get; set; }
+
+        internal static CcfPackageItem FromCcfPackage(CcfPackage package)
+        {
+            Debug.Assert(package != null);
+
+            var res = new CcfPackageItem
+            {
+                Name = package.Name,
+                Options = new CcfOptions
+                {
+                    Kommentar = package.Comment,
+                    Passwort = package.Password
+                },
+                Service = package.Service,
+                Url = package.Url
+            };
+
+            res.Downloads = new List<CcfDownload>();
+            for (int i = 0; i < package.Count; ++i)
+            {
+                var item = CcfDownload.FromCcfEntry(package[i]);
+                Debug.Assert(item != null);
+                res.Downloads.Add(item);
+            }
+
+            return res;
+        }
     }
 
     [XmlRoot(ElementName = "CryptLoad", Namespace = "")]
@@ -66,5 +105,20 @@ namespace OpenDLC
         [XmlElement(ElementName = "Package", Namespace = "")]
         [DataMember]
         public List<CcfPackageItem> Packages { get; set; }
+
+        internal static CryptLoadContainer FromCcfContainer(CcfContainer container)
+        {
+            Debug.Assert(container != null);
+
+            var c = new CryptLoadContainer();
+            c.Packages = new List<CcfPackageItem>();
+            for (int i = 0; i < container.Count; ++i)
+            {
+                var package = container[i];
+                Debug.Assert(package != null);
+                c.Packages.Add(CcfPackageItem.FromCcfPackage(package));
+            }
+            return c;
+        }
     }
 }

@@ -24,19 +24,6 @@ namespace OpenDLC
             if (ulong.TryParse(ccfDownload.FileSize, out fsize))
                 FileSize = fsize;
             FileName = ccfDownload.FileName;
-
-            //TODO:  ccfDownload.UrlAttribute?
-        }
-
-        internal CcfDownload ToCcfDownload()
-        {
-            return new CcfDownload
-            {
-                Url = Url,
-                UrlAttribute = Url,
-                FileName = FileName,
-                FileSize = FileSize.ToString()
-            };
         }
 
         public static implicit operator string (CcfEntry value)
