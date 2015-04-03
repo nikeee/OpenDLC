@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using System.Linq;
 
 namespace OpenDLC.Tests
 {
@@ -17,6 +18,48 @@ namespace OpenDLC.Tests
             Assert.AreEqual(1, container.Count);
             Assert.That(container[0].Url, Is.Not.Null);
             Assert.That(container[0].Url, Is.EqualTo(sampleLink));
+        }
+
+        [Test]
+        public void FromFile1()
+        {
+            // This is from Share-Links.biz
+            string[] expectedLinks =
+            {
+                "http://example.eu",
+                "http://example.com/example.pdf",
+                "http://example.com/example.jpg",
+                "https://example.us/example.jpg"
+            };
+
+            var fileName = TestResources.GetResourcePath("sample-container-1.rsdf");
+            var container = RsdfContainer.FromFile(fileName);
+
+            Assert.That(container, Is.Not.Null);
+            Assert.That(container, Is.All.Not.Null);
+            Assert.That(container, Has.Count.EqualTo(4));
+            Assert.That(container.Select(l => l.Url).ToArray(), Is.EquivalentTo(expectedLinks));
+        }
+
+        [Test]
+        public void FromFile2()
+        {
+            // This is from linkcrypt.ws
+            string[] expectedLinks =
+            {
+                "http://example.eu",
+                "http://example.com/example.pdf",
+                "http://example.com/example.jpg",
+                "https://example.us/example.jpg"
+            };
+
+            var fileName = TestResources.GetResourcePath("sample-container-2.rsdf");
+            var container = RsdfContainer.FromFile(fileName);
+
+            Assert.That(container, Is.Not.Null);
+            Assert.That(container, Is.All.Not.Null);
+            Assert.That(container, Has.Count.EqualTo(4));
+            Assert.That(container.Select(l => l.Url).ToArray(), Is.EquivalentTo(expectedLinks));
         }
 
         [Test]
