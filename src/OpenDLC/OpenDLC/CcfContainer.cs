@@ -39,6 +39,9 @@ namespace OpenDLC
 
         public static CcfContainer FromFile(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
+
             var buffer = File.ReadAllBytes(fileName);
             return FromBuffer(buffer);
         }
@@ -46,12 +49,18 @@ namespace OpenDLC
 #if FEATURE_TAP
         public static async Task<CcfContainer> FromFileAsync(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
+
             using (var f = File.OpenRead(fileName))
                 return await FromStreamAsync(f).ConfigureAwait(false);
         }
 #endif
         public static CcfContainer FromStream(Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+
             var ms = stream as MemoryStream;
             if (ms != null)
             {
@@ -67,6 +76,9 @@ namespace OpenDLC
 #if FEATURE_TAP
         public static async Task<CcfContainer> FromStreamAsync(Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+
             var alreadyMs = stream as MemoryStream;
             if (alreadyMs != null)
             {
@@ -81,6 +93,11 @@ namespace OpenDLC
 #endif
         public static CcfContainer FromBuffer(byte[] buffer)
         {
+            if (buffer == null)
+                throw new ArgumentNullException("buffer"); // TODO: nameof(buffer)
+            if (buffer.Length == 0)
+                throw new ArgumentException("Empty " + "buffer"); // TODO: nameof(buffer)
+
             Version ccfVersion;
             var xml = DecryptXml(buffer, out ccfVersion);
             if (xml == null)
@@ -157,6 +174,9 @@ namespace OpenDLC
 
         private static string DecryptXml(byte[] data, out Version usedVersion)
         {
+            Debug.Assert(data != null);
+            Debug.Assert(data.Length > 0);
+
             using (var rij = CreateRijndael())
             {
                 var output = new byte[4096];
@@ -198,6 +218,7 @@ namespace OpenDLC
 
         private static bool IsValidContainerXml(string data)
         {
+            Debug.Assert(data != null);
             const string Identifier = "<CryptLoad";
             return data.Contains(Identifier, StringComparison.InvariantCultureIgnoreCase);
         }
