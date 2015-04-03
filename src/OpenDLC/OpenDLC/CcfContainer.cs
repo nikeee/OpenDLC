@@ -12,6 +12,8 @@ namespace OpenDLC
 {
     public class CcfContainer : DownloadContainer<CcfPackage>
     {
+        public Version Version { get; private set; }
+
         #region crypto
 
         private static readonly ReadOnlyCollection<byte[]> Keys = new ReadOnlyCollection<byte[]>(new[]
@@ -94,16 +96,72 @@ namespace OpenDLC
                     resContainer.Add(new CcfPackage(currentPackage));
             }
 
+            resContainer.Version = ccfVersion;
+
             return resContainer;
+        }
+
+
+        private static RijndaelManaged CreateRijndael()
+        {
+            return new RijndaelManaged
+            {
+                Mode = CipherMode.CBC,
+                Padding = PaddingMode.Zeros
+            };
+        }
+
+        public override void SaveToStream(Stream stream)
+        {
+            if (stream == null)
+                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+
+            var buffer = SaveToBuffer();
+            stream.Write(buffer, 0, buffer.Length);
+        }
+
+#if FEATURE_TAP
+        public override async Task SaveToStreamAsync(Stream stream)
+        {
+            if (stream == null)
+                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+
+            var buffer = SaveToBuffer();
+            await stream.WriteAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+        }
+#endif
+
+        private byte[] SaveToBuffer()
+        {
+            const int version10KeyIndex = 0;
+
+            var xmlData = SerializeToXml();
+            var xmlDataBytes = Encoding.UTF8.GetBytes(xmlData);
+
+            Debug.Assert(!string.IsNullOrEmpty(xmlData));
+            using (var rij = CreateRijndael())
+            {
+                rij.IV = IVs[version10KeyIndex];
+                rij.Key = Keys[version10KeyIndex];
+                using (var enc = rij.CreateEncryptor())
+                {
+                    var output = new byte[xmlData.Length];
+                    var written = enc.TransformBlock(xmlDataBytes, 0, xmlDataBytes.Length, output, 0);
+
+                    var outputResized = new byte[written];
+                    Buffer.BlockCopy(output, 0, outputResized, 0, written);
+
+                    Debug.Assert(outputResized.Length != 0);
+
+                    return outputResized;
+                }
+            }
         }
 
         private static string DecryptXml(byte[] data, out Version usedVersion)
         {
-            using (var rij = new RijndaelManaged())
+            using (var rij = CreateRijndael())
             {
-                rij.Mode = CipherMode.CBC;
-                rij.Padding = PaddingMode.Zeros;
-
                 // There are more than one key. Just try them out.
                 for (int i = 0; i < Keys.Count; ++i)
                 {
@@ -141,14 +199,15 @@ namespace OpenDLC
         }
 
         private static readonly XmlSerializer _serializer = new XmlSerializer(typeof(CryptLoadContainer));
+        //private static readonly XmlReaderSettings _settings = new XmlReaderSettings
+        //{
+        //    ConformanceLevel = ConformanceLevel.Fragment,
+        //    IgnoreWhitespace = true,
+        //    IgnoreComments = true
+        //};
+
         private static CryptLoadContainer SerializeFromXml(string xmlData)
         {
-            var settings = new XmlReaderSettings
-            {
-                ConformanceLevel = ConformanceLevel.Fragment,
-                IgnoreWhitespace = true,
-                IgnoreComments = true
-            };
             Debug.Assert(xmlData != null);
             xmlData = xmlData.Trim();
             using (var reader = new StringReader(xmlData))
@@ -158,15 +217,13 @@ namespace OpenDLC
             }
         }
 
-        public override void SaveToStream(Stream stream)
+        private string SerializeToXml()
         {
-            throw new NotImplementedException();
+            var sb = new StringBuilder();
+            using (var writer = new StringWriter(sb))
+            using (var ww = XmlWriter.Create(writer))
+                _serializer.Serialize(ww, this);
+            return sb.ToString();
         }
-#if FEATURE_TAP
-        public override Task SaveToStreamAsync(Stream stream)
-        {
-            throw new NotImplementedException();
-        }
-#endif
     }
 }
