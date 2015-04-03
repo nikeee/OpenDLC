@@ -68,6 +68,7 @@
     <Compile Include="RsdfContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RsdfEntry.cs" />
+    <Compile Include="RsdfFormat.cs" />
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
