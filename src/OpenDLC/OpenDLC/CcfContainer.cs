@@ -211,12 +211,6 @@ namespace OpenDLC
         }
 
         private static readonly XmlSerializer _serializer = new XmlSerializer(typeof(CryptLoadContainer));
-        //private static readonly XmlReaderSettings _settings = new XmlReaderSettings
-        //{
-        //    ConformanceLevel = ConformanceLevel.Fragment,
-        //    IgnoreWhitespace = true,
-        //    IgnoreComments = true
-        //};
 
         private static CryptLoadContainer SerializeFromXml(string xmlData)
         {
