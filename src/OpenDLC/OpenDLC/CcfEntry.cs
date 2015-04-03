@@ -15,7 +15,7 @@ namespace OpenDLC
         }
 
         internal CcfEntry(CcfDownload ccfDownload)
-            :  base(ccfDownload.Url)
+            : base(ccfDownload.Url)
         {
             Debug.Assert(ccfDownload != null);
             // ccfDownload = ccfDownload;
@@ -24,11 +24,9 @@ namespace OpenDLC
             if (ulong.TryParse(ccfDownload.FileSize, out fsize))
                 FileSize = fsize;
             FileName = ccfDownload.FileName;
-
-            //TODO:  ccfDownload.UrlAttribute?
         }
 
-        public static implicit operator string(CcfEntry value)
+        public static implicit operator string (CcfEntry value)
         {
             // TODO: Remove this implicit conversion?
             return value == null ? null : value.Url;

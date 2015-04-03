@@ -13,6 +13,11 @@ namespace OpenDLC
         public string Service { get; set; }
         public string Url { get; set; }
 
+        public CcfPackage()
+        {
+            // Nothing?
+        }
+
         internal CcfPackage(CcfPackageItem item)
         {
             Debug.Assert(item != null);

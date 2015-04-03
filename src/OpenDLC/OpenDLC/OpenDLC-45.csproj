@@ -59,6 +59,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CcfFormat.cs" />
     <Compile Include="CcfPackage.cs" />
     <Compile Include="CollectionEx.cs" />
     <Compile Include="CryptloadContainer.cs" />
