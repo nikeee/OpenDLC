@@ -1,20 +1,21 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace OpenDLC
 {
     public abstract partial class DownloadContainer<T> : Collection<T>
     {
-        public void SaveToFile(string fileName)
+        public async Task SaveToFileAsync(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
 
             using (var fs = File.OpenWrite(fileName))
-                SaveToStream(fs);
+                await SaveToStreamAsync(fs).ConfigureAwait(false);
         }
 
-        public abstract void SaveToStream(Stream stream);
+        public abstract Task SaveToStreamAsync(Stream stream);
     }
 }

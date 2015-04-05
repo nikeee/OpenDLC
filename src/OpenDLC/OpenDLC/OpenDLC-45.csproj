@@ -59,6 +59,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CcfContainerAsync.cs" />
     <Compile Include="CcfFormat.cs" />
     <Compile Include="CcfPackage.cs" />
     <Compile Include="CollectionEx.cs" />
@@ -67,10 +68,12 @@
     <Compile Include="CcfEntry.cs" />
     <Compile Include="ConvertEx.cs" />
     <Compile Include="DownloadContainer.cs" />
+    <Compile Include="DownloadContainerAsync.cs" />
     <Compile Include="DownloadEntry.cs" />
     <Compile Include="DownloadPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RsdfContainer.cs" />
+    <Compile Include="RsdfContainerAsync.cs" />
     <Compile Include="RsdfEntry.cs" />
     <Compile Include="RsdfFormat.cs" />
     <Compile Include="StringExtensions.cs" />

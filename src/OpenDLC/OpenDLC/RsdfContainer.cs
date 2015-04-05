@@ -2,13 +2,12 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenDLC
 {
-    public class RsdfContainer : DownloadContainer<RsdfEntry>
+    public partial class RsdfContainer : DownloadContainer<RsdfEntry>
     {
         public static RsdfContainer FromFile(string fileName)
         {
@@ -19,16 +18,6 @@ namespace OpenDLC
                 return FromStream(f);
         }
 
-#if FEATURE_TAP
-        public static async Task<RsdfContainer> FromFileAsync(string fileName)
-        {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
-
-            using (var f = File.OpenRead(fileName))
-                return await FromStreamAsync(f).ConfigureAwait(false);
-        }
-#endif
         public static RsdfContainer FromStream(Stream stream)
         {
             if (stream == null)
@@ -43,26 +32,6 @@ namespace OpenDLC
             using (var reader = new StreamReader(stream))
                 return FromString(reader.ReadToEnd());
         }
-
-#if FEATURE_TAP
-        public static async Task<RsdfContainer> FromStreamAsync(Stream stream)
-        {
-            if (stream == null)
-                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
-
-            var ms = stream as MemoryStream;
-            if (ms != null)
-            {
-                var str = Encoding.UTF8.GetString(ms.ToArray());
-                return FromString(str);
-            }
-            using (var reader = new StreamReader(stream))
-            {
-                var stringValue = await reader.ReadToEndAsync().ConfigureAwait(false);
-                return FromString(stringValue);
-            }
-        }
-#endif
 
         public static RsdfContainer FromString(string value)
         {
@@ -87,25 +56,6 @@ namespace OpenDLC
             var stringBuffer = Encoding.UTF8.GetBytes(str);
             stream.Write(stringBuffer, 0, stringBuffer.Length);
         }
-
-#if FEATURE_TAP
-        public override async Task SaveToStreamAsync(Stream stream)
-        {
-            if (stream == null)
-                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
-
-            var ms = stream as MemoryStream;
-            if (ms != null)
-            {
-                SaveToStream(ms);
-                return;
-            }
-            var str = SaveAsString();
-            Debug.Assert(!string.IsNullOrWhiteSpace(str));
-            var stringBuffer = Encoding.UTF8.GetBytes(str);
-            await stream.WriteAsync(stringBuffer, 0, stringBuffer.Length).ConfigureAwait(false);
-        }
-#endif
 
         public string SaveAsString()
         {
