@@ -7,9 +7,21 @@ namespace OpenDLC.Tests
     [TestFixture]
     public class RsdfContainerTests
     {
+        private static bool IsRunningOnMono()
+        {
+            return Type.GetType("Mono.Runtime") != null;
+        }
+        private const string MonoMessage = "Running on mono. RSDF is not supported on mono. Skipping test.";
+
         [Test]
         public void FromString()
         {
+            if (IsRunningOnMono())
+            {
+                Console.WriteLine(MonoMessage);
+                return;
+            }
+
             var container = RsdfContainer.FromString("696D6C5666374861645137307A6C466C56755341654E33716D3859367635734E476B5249415649744D4C713259723861726E4F5368673D3D0D0A");
             const string sampleLink = "http://foo.example.org/rsdftest.bar";
 
@@ -23,6 +35,12 @@ namespace OpenDLC.Tests
         [Test]
         public void FromFile1()
         {
+            if (IsRunningOnMono())
+            {
+                Console.WriteLine(MonoMessage);
+                return;
+            }
+
             // This is from Share-Links.biz
             string[] expectedLinks =
             {
@@ -44,6 +62,12 @@ namespace OpenDLC.Tests
         [Test]
         public void FromFile2()
         {
+            if (IsRunningOnMono())
+            {
+                Console.WriteLine(MonoMessage);
+                return;
+            }
+
             // This is from linkcrypt.ws
             string[] expectedLinks =
             {
@@ -65,6 +89,12 @@ namespace OpenDLC.Tests
         [Test]
         public void SaveAsString()
         {
+            if (IsRunningOnMono())
+            {
+                Console.WriteLine(MonoMessage);
+                return;
+            }
+
             var container = new RsdfContainer();
             const string destContainer = "696D6C5666374861645137307A6C466C56755341654E33716D3859367635734E476B5249415649744D4C713259723861726E4F5368673D3D0D0A";
             container.Add(new RsdfEntry("CCF: http://foo.example.org/rsdftest.bar"));
