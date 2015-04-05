@@ -15,8 +15,8 @@
      *    This API class was created by Frank Burian,
      *    for the project www.urlCrypt.com (a link protection service) and
      *    for the download manager jDownloder (http://jdownloader.org)
-     * =======================================================================================================      
-     *   © Copyright 2009 by JDTeam(jdownloader.org) & AppWork UG    
+     * =======================================================================================================
+     *   © Copyright 2009 by JDTeam(jdownloader.org) & AppWork UG
      * =======================================================================================================
      *    Support: urlcrypt@nquee.com or visit http://forum.nquee.com
      *
@@ -52,7 +52,7 @@
           }
         ?>
      */
-                   
+
     class conFiles {
 
         // >>>>>>>>> PLEASE EDIT - START !!!
@@ -99,7 +99,7 @@
 
         // Constructor
         function __construct() {
-     
+
             $this->resetDataModel();
         }
 
