@@ -33,7 +33,7 @@ You need an internet connection to decrypt the DLC format. This is by design.
 var container = await DlcContainer.FromFileAsync(pathToFile, appId, appRevision, appSecret);
 foreach(DlcPackage currentPackage in container)
 {
-    foreach(DlcEntry currentLink in currentPackage)+
+    foreach(DlcEntry currentLink in currentPackage)
     {
         Console.WriteLine(currentLink);
     }
