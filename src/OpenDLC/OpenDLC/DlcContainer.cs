@@ -25,7 +25,7 @@ namespace OpenDLC
             throw new NotImplementedException();
         }
 
-        public static Task<DlcContainer> FromFile(string fileName, string appId, string revision, byte[] appSecret)
+        public static Task<DlcContainer> FromFileAsync(string fileName, string appId, string revision, byte[] appSecret)
         {
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
