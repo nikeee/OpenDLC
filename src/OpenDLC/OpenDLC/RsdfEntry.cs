@@ -6,7 +6,7 @@ namespace OpenDLC
             : base(url)
         { }
 
-        public static implicit operator string(RsdfEntry value)
+        public static implicit operator string (RsdfEntry value)
         {
             return value == null ? null : value.Url;
         }
