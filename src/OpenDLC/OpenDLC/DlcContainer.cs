@@ -31,9 +31,9 @@ namespace OpenDLC
                 throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
 
             var str = File.ReadAllText(fileName);
-            return FromString(str, appId, revision, appSecret);
+            return FromStringAsync(str, appId, revision, appSecret);
         }
-        private static async Task<DlcContainer> FromString(string fileContent, string appId, string revision, byte[] appSecret)
+        private static async Task<DlcContainer> FromStringAsync(string fileContent, string appId, string revision, byte[] appSecret)
         {
             if (string.IsNullOrWhiteSpace(fileContent))
                 throw new ArgumentException("Invalid file contents");
