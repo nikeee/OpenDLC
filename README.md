@@ -6,7 +6,7 @@ Opening up DLC formats.
 ## RSDF
 ```C#
 var container = await RsdfContainer.FromFileAsync(pathToFile);
-Console.WriteLine("All link in this file:");
+Console.WriteLine("All links in this file:");
 foreach(RsdfEntry currentLink in container)
 {
     Console.WriteLine(currentLink);
@@ -16,7 +16,7 @@ foreach(RsdfEntry currentLink in container)
 # CCF
 ```C#
 var container = await CcfContainer.FromFileAsync(pathToFile);
-Console.WriteLine("All link in this file:");
+Console.WriteLine("All links in this file:");
 foreach(CcfPackage currentPackage in container)
 {
     foreach(CcfEntry currentLink in currentPackage)
