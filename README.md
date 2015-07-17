@@ -26,6 +26,21 @@ foreach(CcfPackage currentPackage in container)
 }
 ```
 
+# DLC
+You need an internet connection to decrypt the DLC format. This is by design.
+```C#
+// Contact the JD developers to get an appId and appSecret
+var container = await DlcContainer.FromFileAsync(pathToFile, appId, appRevision, appSecret);
+foreach(DlcPackage currentPackage in container)
+{
+    foreach(DlcEntry currentLink in currentPackage)
+    {
+        Console.WriteLine(currentLink);
+    }
+}
+```
+
+
 Pretty much the same. You can even join the links together.
 ```C#
 var someRsdf = await RsdfContainer.FromFileAsync(pathToFile);
