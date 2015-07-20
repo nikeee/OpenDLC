@@ -72,6 +72,7 @@
     <Compile Include="CcfContainer.cs" />
     <Compile Include="CcfEntry.cs" />
     <Compile Include="ConvertEx.cs" />
+    <Compile Include="DlcAppSettings.cs" />
     <Compile Include="DlcDecryptionException.cs" />
     <Compile Include="DlcEntry.cs" />
     <Compile Include="DlcContainer.cs" />
@@ -91,6 +92,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenDLC-Key.pfx" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.AnalyzerPowerPack.1.0.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
+    <Analyzer Include="..\packages\Microsoft.AnalyzerPowerPack.1.0.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

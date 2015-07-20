@@ -25,18 +25,21 @@ namespace OpenDLC
             throw new NotImplementedException();
         }
 
-        public static Task<DlcContainer> FromFileAsync(string fileName, string appId, string revision, byte[] appSecret)
+        public static Task<DlcContainer> FromFileAsync(string fileName, DlcAppSettings applicationSettings)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
+                throw new ArgumentNullException(nameof(fileName));
+            if (applicationSettings == null)
+                throw new ArgumentNullException(nameof(applicationSettings));
 
             var str = File.ReadAllText(fileName);
-            return FromStringAsync(str, appId, revision, appSecret);
+            return FromStringAsync(str, applicationSettings);
         }
-        private static async Task<DlcContainer> FromStringAsync(string fileContent, string appId, string revision, byte[] appSecret)
+        private static async Task<DlcContainer> FromStringAsync(string fileContent, DlcAppSettings applicationSettings)
         {
             if (string.IsNullOrWhiteSpace(fileContent))
                 throw new ArgumentException("Invalid file contents");
+            Debug.Assert(applicationSettings != null);
 
             var key = fileContent.Substring(fileContent.Length - 88);
             fileContent = fileContent.Remove(fileContent.Length - 88);
@@ -44,9 +47,11 @@ namespace OpenDLC
             var fileContentBuffer = Convert.FromBase64String((fileContent ?? string.Empty).Trim());
             var keyBuffer = Convert.FromBase64String((key ?? string.Empty).Trim());
 
-            var tempKey = await CallJDService(appId, revision, key);
+            var tempKey = await CallJDService(applicationSettings.ApplicationId, applicationSettings.Revision, key);
 
-            var decryptionKey = CreateDecryptionKey(tempKey, appSecret);
+            var secretBuffer = applicationSettings.GetSecretBuffer();
+
+            var decryptionKey = CreateDecryptionKey(tempKey, secretBuffer);
 
             var encodedXml = DecryptContainer(fileContentBuffer, decryptionKey);
 

@@ -5,10 +5,8 @@ namespace OpenDLC
 {
     internal class ConvertEx
     {
-        internal static string ToHexString(byte[] value)
-        {
-            return BitConverter.ToString(value).Replace("-", "");
-        }
+        internal static string ToHexString(byte[] value) => BitConverter.ToString(value).Replace("-", "");
+
         internal static byte[] FromHexString(string value)
         {
             if (value == null)
@@ -36,10 +34,7 @@ namespace OpenDLC
             return res;
         }
 
-        private static int GetHexValue(char hex)
-        {
-            // See: http://stackoverflow.com/a/9995303/785210
-            return hex - (hex < 58 ? 48 : 55);
-        }
+        // See: http://stackoverflow.com/a/9995303/785210
+        private static int GetHexValue(char hex) => hex - (hex < 58 ? 48 : 55);
     }
 }
