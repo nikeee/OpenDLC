@@ -113,10 +113,8 @@ namespace OpenDLC
                                 continue;
 
                             var url = f.Element("url");
-                            if (url == null)
-                                continue;
-
-                            packageObj.Add(new DlcEntry(url?.Value));
+                            if (url != null)
+                                packageObj.Add(new DlcEntry(url.Value));
                         }
 
                         container.Add(packageObj);
@@ -140,18 +138,18 @@ namespace OpenDLC
             var msg = new HttpRequestMessage(HttpMethod.Post, ub.Uri);
 
             using (var cl = new HttpClient())
-            using (var res = await cl.SendAsync(msg))
+            using (var res = await cl.SendAsync(msg).ConfigureAwait(false))
             {
                 if (!res.IsSuccessStatusCode)
                     throw new DlcDecryptionException("Server responded with unsuccessful HTTP status code.");
 
-                var resContent = await res.Content.ReadAsStringAsync() ?? string.Empty;
+                var resContent = await res.Content.ReadAsStringAsync().ConfigureAwait(false) ?? string.Empty;
 
                 var match = Regex.Match(resContent, "<rc>(.*)</rc>");
                 if (!match.Success)
                     throw new DlcDecryptionException($"Server responded with non-XML content:{Environment.NewLine}{resContent}");
 
-                var tempKey = match.Groups[1].Value ?? string.Empty;
+                var tempKey = match.Groups[1]?.Value ?? string.Empty;
                 tempKey = tempKey.Trim();
                 if (tempKey == string.Empty)
                     throw new DlcDecryptionException("Server responded with empty decryption key.");
