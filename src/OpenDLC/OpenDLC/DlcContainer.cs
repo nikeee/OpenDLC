@@ -64,13 +64,10 @@ namespace OpenDLC
                     var generator = header.Element("generator");
                     if (generator != null)
                     {
-                        var app = generator.Element("app");
-                        var url = generator.Element("url");
-
                         var generatorObj = new DlcGenerator
                         {
-                            Application = app?.Value,
-                            Url = url?.Value
+                            Application = generator.Element("app")?.Value,
+                            Url = generator.Element("url")?.Value
                         };
 
                         var version = generator.Element("version");
@@ -87,12 +84,10 @@ namespace OpenDLC
                     var tribute = header.Element("tribute");
                     if (tribute != null)
                     {
-                        var name = tribute.Element("name");
-                        container.Tribute = new DlcTribute(name?.Value);
+                        container.Tribute = new DlcTribute(tribute.Element("name")?.Value);
                     }
 
-                    var dlcxmlversion = header.Element("dlcxmlversion");
-                    container.XmlVersion = dlcxmlversion?.Value;
+                    container.XmlVersion = header.Element("dlcxmlversion")?.Value;
                 }
 
                 var content = dlc.Element("content");
@@ -104,15 +99,11 @@ namespace OpenDLC
                         if (p == null)
                             continue;
 
-                        var name = p.Attribute("name");
-                        var comment = p.Attribute("comment");
-                        var category = p.Attribute("category");
-
                         var packageObj = new DlcPackage
                         {
-                            Name = name?.Value,
-                            Comment = comment?.Value,
-                            Category = category?.Value
+                            Name = p.Attribute("name")?.Value,
+                            Comment = p.Attribute("comment")?.Value,
+                            Category = p.Attribute("category")?.Value
                         };
 
                         var files = p.Elements("file");
@@ -233,9 +224,8 @@ namespace OpenDLC
                 return;
 
             foreach (var attr in element.Attributes())
-            {
                 attr.Value = DlcFormat.DecodeDataString(attr.Value);
-            }
+
             foreach (var sub in element.Elements())
             {
                 if (!sub.HasElements && !sub.IsEmpty)
