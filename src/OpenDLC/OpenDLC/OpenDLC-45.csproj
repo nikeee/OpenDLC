@@ -76,6 +76,7 @@
     <Compile Include="DlcDecryptionException.cs" />
     <Compile Include="DlcEntry.cs" />
     <Compile Include="DlcContainer.cs" />
+    <Compile Include="DlcFormat.cs" />
     <Compile Include="DlcGenerator.cs" />
     <Compile Include="DlcPackage.cs" />
     <Compile Include="DlcTribute.cs" />
