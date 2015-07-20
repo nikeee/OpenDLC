@@ -77,8 +77,8 @@ namespace OpenDLC
 
                         var generatorObj = new DlcGenerator
                         {
-                            Application = app == null ? null : app.Value,
-                            Url = url == null ? null : url.Value
+                            Application = app?.Value,
+                            Url = url?.Value
                         };
 
                         var version = generator.Element("version");
@@ -92,20 +92,15 @@ namespace OpenDLC
                         container.Generator = generatorObj;
                     }
 
-
                     var tribute = header.Element("tribute");
                     if (tribute != null)
                     {
                         var name = tribute.Element("name");
-
-                        container.Tribute = new DlcTribute
-                        {
-                            Name = name == null ? null : name.Value
-                        };
+                        container.Tribute = new DlcTribute(name?.Value);
                     }
 
                     var dlcxmlversion = header.Element("dlcxmlversion");
-                    container.XmlVersion = dlcxmlversion == null ? null : dlcxmlversion.Value;
+                    container.XmlVersion = dlcxmlversion?.Value;
                 }
 
                 var content = dlc.Element("content");
@@ -123,9 +118,9 @@ namespace OpenDLC
 
                         var packageObj = new DlcPackage
                         {
-                            Name = name == null ? null : name.Value,
-                            Comment = comment == null ? null : comment.Value,
-                            Category = category == null ? null : category.Value
+                            Name = name?.Value,
+                            Comment = comment?.Value,
+                            Category = category?.Value
                         };
 
                         var files = p.Elements("file");
