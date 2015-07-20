@@ -30,7 +30,9 @@ foreach(CcfPackage currentPackage in container)
 You need an internet connection to decrypt the DLC format. This is by design.
 ```C#
 // Contact the JD developers to get an appId and appSecret
-var container = await DlcContainer.FromFileAsync(pathToFile, appId, appRevision, appSecret);
+var appSettings = new DlcAppSettings(appId, appSecret, appRevision);
+
+var container = await DlcContainer.FromFileAsync(pathToFile, appSettings);
 foreach(DlcPackage currentPackage in container)
 {
     foreach(DlcEntry currentLink in currentPackage)

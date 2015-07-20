@@ -11,7 +11,7 @@ namespace OpenDLC
         public static async Task<RsdfContainer> FromFileAsync(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
+                throw new ArgumentNullException(nameof(fileName));
 
             using (var f = File.OpenRead(fileName))
                 return await FromStreamAsync(f).ConfigureAwait(false);
@@ -19,7 +19,7 @@ namespace OpenDLC
         public static async Task<RsdfContainer> FromStreamAsync(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+                throw new ArgumentNullException(nameof(stream));
 
             var ms = stream as MemoryStream;
             if (ms != null)
@@ -36,7 +36,7 @@ namespace OpenDLC
         public override async Task SaveToStreamAsync(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+                throw new ArgumentNullException(nameof(stream));
 
             var ms = stream as MemoryStream;
             if (ms != null)

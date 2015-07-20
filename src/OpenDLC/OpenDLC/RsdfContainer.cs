@@ -12,7 +12,7 @@ namespace OpenDLC
         public static RsdfContainer FromFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
+                throw new ArgumentNullException(nameof(fileName));
 
             using (var f = File.OpenRead(fileName))
                 return FromStream(f);
@@ -21,7 +21,7 @@ namespace OpenDLC
         public static RsdfContainer FromStream(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+                throw new ArgumentNullException(nameof(stream));
 
             var ms = stream as MemoryStream;
             if (ms != null)
@@ -49,7 +49,7 @@ namespace OpenDLC
         public override void SaveToStream(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+                throw new ArgumentNullException(nameof(stream));
 
             var str = SaveAsString();
             Debug.Assert(!string.IsNullOrWhiteSpace(str));

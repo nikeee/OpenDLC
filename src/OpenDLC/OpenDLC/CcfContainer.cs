@@ -17,7 +17,7 @@ namespace OpenDLC
         public static CcfContainer FromFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
+                throw new ArgumentNullException(nameof(fileName));
 
             var buffer = File.ReadAllBytes(fileName);
             return FromBuffer(buffer);
@@ -26,7 +26,7 @@ namespace OpenDLC
         public static CcfContainer FromStream(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+                throw new ArgumentNullException(nameof(stream));
 
             var ms = stream as MemoryStream;
             if (ms != null)
@@ -45,9 +45,9 @@ namespace OpenDLC
         public static CcfContainer FromBuffer(byte[] buffer)
         {
             if (buffer == null)
-                throw new ArgumentNullException("buffer"); // TODO: nameof(buffer)
+                throw new ArgumentNullException(nameof(buffer));
             if (buffer.Length == 0)
-                throw new ArgumentException("Empty " + "buffer"); // TODO: nameof(buffer)
+                throw new ArgumentException("Empty " + nameof(buffer));
 
             Version ccfVersion;
             var xml = DecryptXml(buffer, out ccfVersion);
@@ -77,7 +77,7 @@ namespace OpenDLC
         public override void SaveToStream(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream"); // TODO: nameof(stream)
+                throw new ArgumentNullException(nameof(stream));
 
             var buffer = SaveToBuffer();
             stream.Write(buffer, 0, buffer.Length);

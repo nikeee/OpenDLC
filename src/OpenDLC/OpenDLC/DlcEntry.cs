@@ -6,9 +6,6 @@
             : base(url)
         { }
 
-        public static implicit operator string (DlcEntry value)
-        {
-            return value == null ? null : value.Url;
-        }
+        public static implicit operator string (DlcEntry value) => value?.Url;
     }
 }
