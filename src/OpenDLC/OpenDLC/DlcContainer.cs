@@ -165,18 +165,18 @@ namespace OpenDLC
             using (var res = await cl.SendAsync(msg))
             {
                 if (!res.IsSuccessStatusCode)
-                    throw new DlcDecryptionException(); // TODO
+                    throw new DlcDecryptionException("Server responded with unsuccessful HTTP status code.");
 
-                var resContent = await res.Content.ReadAsStringAsync();
+                var resContent = await res.Content.ReadAsStringAsync() ?? string.Empty;
 
                 var match = Regex.Match(resContent, "<rc>(.*)</rc>");
                 if (!match.Success)
-                    throw new DlcDecryptionException(); // TODO
+                    throw new DlcDecryptionException($"Server responded with non-XML content:{Environment.NewLine}{resContent}");
 
                 var tempKey = match.Groups[1].Value ?? string.Empty;
                 tempKey = tempKey.Trim();
                 if (tempKey == string.Empty)
-                    throw new DlcDecryptionException(); // TODO
+                    throw new DlcDecryptionException("Server responded with empty decryption key.");
 
                 if (tempKey == RateLimitExceededKey)
                     throw new DlcLimitExceededException();
