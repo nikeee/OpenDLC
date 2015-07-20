@@ -39,16 +39,13 @@ namespace OpenDLC
         [DataMember]
         public string FileName { get; set; }
 
-        internal static CcfDownload FromCcfEntry(CcfEntry entry)
+        internal static CcfDownload FromCcfEntry(CcfEntry entry) => new CcfDownload
         {
-            return new CcfDownload
-            {
-                Url = entry.Url,
-                UrlAttribute = entry.Url,
-                FileName = entry.FileName,
-                FileSize = entry.FileSize.ToString()
-            };
-        }
+            Url = entry.Url,
+            UrlAttribute = entry.Url,
+            FileName = entry.FileName,
+            FileSize = entry.FileSize.ToString()
+        };
     }
 
     [XmlRoot(ElementName = "Package", Namespace = "")]
