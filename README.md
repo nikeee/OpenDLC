@@ -13,7 +13,7 @@ foreach(RsdfEntry currentLink in container)
 }
 ```
 
-# CCF
+## CCF
 ```C#
 var container = await CcfContainer.FromFileAsync(pathToFile);
 Console.WriteLine("All links in this file:");
@@ -26,7 +26,7 @@ foreach(CcfPackage currentPackage in container)
 }
 ```
 
-# DLC
+## DLC
 You need an internet connection to decrypt the DLC format. This is by design.
 ```C#
 // Contact the JD developers to get an appId and appSecret
