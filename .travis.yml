@@ -1,5 +1,6 @@
 language: csharp
 solution: ./src/OpenDLC/OpenDLC.sln
+sudo: false
 install:
   - nuget restore ./src/OpenDLC/OpenDLC.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
