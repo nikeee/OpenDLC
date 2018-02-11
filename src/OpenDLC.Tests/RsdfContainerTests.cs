@@ -14,7 +14,7 @@ namespace OpenDLC.Tests
 
             Assert.NotNull(container);
             Assert.All(container, i => Assert.NotNull(i));
-            Assert.Equal(1, container.Count);
+            Assert.Single(container);
             Assert.NotNull(container[0].Url);
             Assert.Equal(sampleLink, container[0].Url);
         }

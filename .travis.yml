@@ -6,4 +6,4 @@ install:
 script:
   - cd src
   - dotnet build
-  - dotnet test
+  - dotnet test OpenDLC.Tests

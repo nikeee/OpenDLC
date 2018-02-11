@@ -30,7 +30,7 @@ namespace OpenDLC.Tests
 
             Assert.NotNull(container);
             Assert.All(container, i => Assert.NotNull(i));
-            Assert.Equal(1, container.Count);
+            Assert.Single(container);
 
             var package = container[0];
 
@@ -71,7 +71,7 @@ namespace OpenDLC.Tests
 
             Assert.NotNull(container);
             Assert.All(container, i => Assert.NotNull(i));
-            Assert.Equal(1, container.Count);
+            Assert.Single(container);
 
             var package = container[0];
 
@@ -123,7 +123,7 @@ namespace OpenDLC.Tests
 
                 Assert.NotNull(actualContainer);
                 Assert.All(actualContainer, i => Assert.NotNull(i));
-                Assert.Equal(1, actualContainer.Count);
+                Assert.Single(actualContainer);
 
                 var actualPackage = actualContainer[0];
 
@@ -176,7 +176,7 @@ namespace OpenDLC.Tests
 
                 Assert.NotNull(actualContainer);
                 Assert.All(actualContainer, i => Assert.NotNull(i));
-                Assert.Equal(1, actualContainer.Count);
+                Assert.Single(actualContainer);
 
                 var actualPackage = actualContainer[0];
 
