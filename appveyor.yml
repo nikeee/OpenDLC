@@ -1,3 +1,13 @@
 configuration: Release
 before_build:
-  - nuget restore src\OpenDLC\OpenDLC.sln
+  - dotnet restore src
+build_script:
+  - dotnet build src
+test_script:
+  - cd src
+  - dotnet test OpenDLC.Tests
+after_build:
+  - cd src
+  - dotnet pack OpenDLC -o artifacts
+artifacts:
+  - path: artifacts\**\*.*
