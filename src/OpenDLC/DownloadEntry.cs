@@ -9,9 +9,6 @@
             Url = url;
         }
 
-        public override string ToString()
-        {
-            return Url;
-        }
+        public override string ToString() => Url;
     }
 }

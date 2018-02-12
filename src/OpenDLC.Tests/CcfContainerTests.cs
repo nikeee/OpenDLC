@@ -1,14 +1,13 @@
 ﻿using System;
-using NUnit.Framework;
+using Xunit;
 using System.Linq;
 using System.IO;
 
 namespace OpenDLC.Tests
 {
-    [TestFixture]
     public class CcfContainerTests
     {
-        [Test]
+        [Fact]
         public void FromFile1()
         {
             // This is from Share-Links.biz
@@ -29,25 +28,27 @@ namespace OpenDLC.Tests
             var fileName = TestResources.GetResourcePath("sample-container-1.ccf");
             var container = CcfContainer.FromFile(fileName);
 
-            Assert.That(container, Is.Not.Null);
-            Assert.That(container, Is.All.Not.Null);
-            Assert.That(container, Has.Count.EqualTo(1));
+            Assert.NotNull(container);
+            Assert.All(container, i => Assert.NotNull(i));
+            Assert.Single(container);
 
             var package = container[0];
 
-            Assert.That(package, Is.Not.Null);
-            Assert.That(package, Is.All.Not.Null);
-            Assert.That(package, Has.Count.EqualTo(4));
-            Assert.That(package.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
-            Assert.That(package.Name, Is.EqualTo(expectedTitle));
-            Assert.That(package.Service, Is.EqualTo(expectedService));
-            Assert.That(package.Url, Is.EqualTo(expectedPackageUrl));
-            Assert.That(package.Comment, Is.EqualTo(expectedPackageComment));
+            Assert.NotNull(package);
+            Assert.All(package, i => Assert.NotNull(i));
+            Assert.Equal(4, package.Count);
+            Assert.Equal(expectedPassword2, package.Password);
+            // Assert.That(package.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
+            Assert.Equal(expectedTitle, package.Name);
+            Assert.Equal(expectedService, package.Service);
+            Assert.Equal(expectedPackageUrl, package.Url);
+            Assert.Equal(expectedPackageComment, package.Comment);
 
-            Assert.That(package.Select(l => l.Url).ToArray(), Is.EquivalentTo(expectedLinks));
-            Assert.That(package.Select(f => f.FileSize), Has.All.EqualTo(0)); // Share-Links sets all links to size of zero.
+            Assert.Equal(expectedLinks, package.Select(l => l.Url).ToArray());
+            Assert.All(package.Select(f => f.FileSize), i => Assert.Equal(0, (long)i)); // Share-Links sets all links to size of zero.
         }
-        [Test]
+
+        [Fact]
         public void FromFile2()
         {
             // This is from linkcrypt.ws
@@ -68,26 +69,26 @@ namespace OpenDLC.Tests
             var fileName = TestResources.GetResourcePath("sample-container-2.ccf");
             var container = CcfContainer.FromFile(fileName);
 
-            Assert.That(container, Is.Not.Null);
-            Assert.That(container, Is.All.Not.Null);
-            Assert.That(container, Has.Count.EqualTo(1));
+            Assert.NotNull(container);
+            Assert.All(container, i => Assert.NotNull(i));
+            Assert.Single(container);
 
             var package = container[0];
 
-            Assert.That(package, Is.Not.Null);
-            Assert.That(package, Is.All.Not.Null);
-            Assert.That(package, Has.Count.EqualTo(4));
-            Assert.That(package.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
-            Assert.That(package.Name, Is.EqualTo(expectedTitle));
-            Assert.That(package.Service, Is.EqualTo(expectedService));
-            Assert.That(package.Url, Is.EqualTo(expectedPackageUrl));
-            Assert.That(package.Comment, Is.EqualTo(expectedPackageComment));
+            Assert.NotNull(package);
+            Assert.All(package, i => Assert.NotNull(i));
+            Assert.Equal(4, package.Count);
+            // Assert.That(package.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
+            Assert.Equal(expectedTitle, package.Name);
+            Assert.Equal(expectedService, package.Service);
+            Assert.Equal(expectedPackageUrl, package.Url);
+            Assert.Equal(expectedPackageComment, package.Comment);
 
-            Assert.That(package.Select(l => l.Url).ToArray(), Is.EquivalentTo(expectedLinks));
-            Assert.That(package.Select(f => f.FileSize), Has.All.EqualTo(0)); // Share-Links sets all links to size of zero.
+            Assert.Equal(expectedLinks, package.Select(l => l.Url).ToArray());
+            Assert.All(package.Select(f => f.FileSize), i => Assert.Equal(0, (long)i)); // Share-Links sets all links to size of zero.
         }
 
-        [Test]
+        [Fact]
         public void SaveToStream1()
         {
             string[] expectedLinks =
@@ -120,27 +121,27 @@ namespace OpenDLC.Tests
 
                 var actualContainer = CcfContainer.FromStream(ms);
 
-                Assert.That(actualContainer, Is.Not.Null);
-                Assert.That(actualContainer, Is.All.Not.Null);
-                Assert.That(actualContainer, Has.Count.EqualTo(1));
+                Assert.NotNull(actualContainer);
+                Assert.All(actualContainer, i => Assert.NotNull(i));
+                Assert.Single(actualContainer);
 
                 var actualPackage = actualContainer[0];
 
-                Assert.That(actualPackage, Is.Not.Null);
-                Assert.That(actualPackage, Is.All.Not.Null);
-                Assert.That(actualPackage, Has.Count.EqualTo(4));
-                Assert.That(actualPackage.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
-                Assert.That(actualPackage.Name, Is.EqualTo(expectedTitle));
-                Assert.That(actualPackage.Service, Is.EqualTo(expectedService));
-                Assert.That(actualPackage.Url, Is.EqualTo(expectedPackageUrl));
-                Assert.That(actualPackage.Comment, Is.EqualTo(expectedPackageComment));
+                Assert.NotNull(actualPackage);
+                Assert.All(actualPackage, i => Assert.NotNull(i));
+                Assert.Equal(4, actualPackage.Count);
+                // Assert.That(actualPackage.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
+                Assert.Equal(expectedTitle, actualPackage.Name);
+                Assert.Equal(expectedService, actualPackage.Service);
+                Assert.Equal(expectedPackageUrl, actualPackage.Url);
+                Assert.Equal(expectedPackageComment, actualPackage.Comment);
 
-                Assert.That(actualPackage.Select(l => l.Url).ToArray(), Is.EquivalentTo(expectedLinks));
-                Assert.That(actualPackage.Select(f => f.FileSize), Has.All.EqualTo(0));
+                Assert.Equal(expectedLinks, actualPackage.Select(l => l.Url).ToArray());
+                Assert.All(actualPackage.Select(f => f.FileSize), i => Assert.Equal(0, (long)i));
             }
         }
 
-        [Test]
+        [Fact]
         public void SaveToStream2()
         {
             string[] expectedLinks =
@@ -173,48 +174,48 @@ namespace OpenDLC.Tests
 
                 var actualContainer = CcfContainer.FromStream(ms);
 
-                Assert.That(actualContainer, Is.Not.Null);
-                Assert.That(actualContainer, Is.All.Not.Null);
-                Assert.That(actualContainer, Has.Count.EqualTo(1));
+                Assert.NotNull(actualContainer);
+                Assert.All(actualContainer, i => Assert.NotNull(i));
+                Assert.Single(actualContainer);
 
                 var actualPackage = actualContainer[0];
 
-                Assert.That(actualPackage, Is.Not.Null);
-                Assert.That(actualPackage, Is.All.Not.Null);
-                Assert.That(actualPackage, Has.Count.EqualTo(4));
-                Assert.That(actualPackage.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
-                Assert.That(actualPackage.Name, Is.EqualTo(expectedTitle));
-                Assert.That(actualPackage.Service, Is.EqualTo(expectedService));
-                Assert.That(actualPackage.Url, Is.EqualTo(expectedPackageUrl));
-                Assert.That(actualPackage.Comment, Is.EqualTo(expectedPackageComment));
+                Assert.NotNull(actualPackage);
+                Assert.All(actualPackage, i => Assert.NotNull(i));
+                Assert.Equal(4, actualPackage.Count);
+                // Assert.That(actualPackage.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
+                Assert.Equal(expectedTitle, actualPackage.Name);
+                Assert.Equal(expectedService, actualPackage.Service);
+                Assert.Equal(expectedPackageUrl, actualPackage.Url);
+                Assert.Equal(expectedPackageComment, actualPackage.Comment);
 
-                Assert.That(actualPackage.Select(l => l.Url).ToArray(), Is.EquivalentTo(expectedLinks));
-                Assert.That(actualPackage.Select(f => f.FileSize), Has.All.EqualTo(0));
+                Assert.Equal(expectedLinks, actualPackage.Select(l => l.Url).ToArray());
+                Assert.All(actualPackage.Select(f => f.FileSize), i => Assert.Equal(0, (long)i));
             }
         }
 
-        [Test]
+        [Fact]
         public void FromWithNullArgument()
         {
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromBuffer(null));
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromFile(null));
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromFile(string.Empty));
-            Assert.Throws<ArgumentNullException>(async () => await CcfContainer.FromFileAsync(null));
-            Assert.Throws<ArgumentNullException>(async () => await CcfContainer.FromFileAsync(string.Empty));
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await CcfContainer.FromFileAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await CcfContainer.FromFileAsync(string.Empty));
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromStream(null));
-            Assert.Throws<ArgumentNullException>(async () => await CcfContainer.FromStreamAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await CcfContainer.FromStreamAsync(null));
         }
 
-        [Test]
+        [Fact]
         public void SaveWithNullArgument()
         {
             var c = new CcfContainer();
             Assert.Throws<ArgumentNullException>(() => c.SaveToFile(null));
             Assert.Throws<ArgumentNullException>(() => c.SaveToFile(string.Empty));
-            Assert.Throws<ArgumentNullException>(async () => await c.SaveToFileAsync(null));
-            Assert.Throws<ArgumentNullException>(async () => await c.SaveToFileAsync(string.Empty));
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await c.SaveToFileAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await c.SaveToFileAsync(string.Empty));
             Assert.Throws<ArgumentNullException>(() => c.SaveToStream(null));
-            Assert.Throws<ArgumentNullException>(async () => await c.SaveToStreamAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await c.SaveToStreamAsync(null));
         }
     }
 }

@@ -9,8 +9,7 @@ namespace OpenDLC
         public void SaveToFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName"); // TODO: nameof(fileName)
-
+                throw new ArgumentNullException(nameof(fileName));
             using (var fs = File.OpenWrite(fileName))
                 SaveToStream(fs);
         }

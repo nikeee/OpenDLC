@@ -25,10 +25,6 @@ namespace OpenDLC
             FileName = ccfDownload.FileName;
         }
 
-        public static implicit operator string (CcfEntry value)
-        {
-            // TODO: Remove this implicit conversion?
-            return value == null ? null : value.Url;
-        }
+        public static implicit operator string (CcfEntry value) => value?.Url;
     }
 }

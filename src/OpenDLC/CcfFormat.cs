@@ -29,14 +29,12 @@ namespace OpenDLC
             new Version(0, 7)
         });
 
-        internal static SymmetricAlgorithm CreateSymmetricAlgorithm()
+        internal static SymmetricAlgorithm CreateSymmetricAlgorithm() => new RijndaelManaged
         {
-            return new RijndaelManaged
-            {
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.Zeros
-            };
-        }
+            Mode = CipherMode.CBC,
+            Padding = PaddingMode.Zeros
+        };
+
 
         internal static XmlWriterSettings WriterSettings = new XmlWriterSettings
         {
