@@ -2,7 +2,12 @@
 
 .NET API for DLC formats. Supports DLC, RSDF and CCF.
 
-
+```Shell
+# Install using dotnet cli:
+dotnet add package OpenDLC --version
+# Using Package Manager:
+Install-Package OpenDLC
+```
 ## RSDF
 ```C#
 var container = await RsdfContainer.FromFileAsync(pathToFile);
