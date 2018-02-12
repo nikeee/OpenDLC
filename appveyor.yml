@@ -2,7 +2,7 @@ configuration: Release
 before_build:
   - dotnet restore src
 build_script:
-  - dotnet build -c Release src
+  - dotnet build src
 test_script:
   - dotnet test src\OpenDLC.Tests
 after_build:
