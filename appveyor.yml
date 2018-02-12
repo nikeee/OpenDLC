@@ -2,10 +2,10 @@ configuration: Release
 before_build:
   - dotnet restore src
 build_script:
-  - dotnet build src
+  - dotnet build -c Release src
 test_script:
   - dotnet test src\OpenDLC.Tests
 after_build:
   - dotnet pack src\OpenDLC -o artifacts
 artifacts:
-  - path: artifacts\**\*.*
+  - path: artifacts\*.*
