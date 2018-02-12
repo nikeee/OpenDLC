@@ -8,4 +8,4 @@ test_script:
 after_build:
   - dotnet pack src\OpenDLC -o artifacts
 artifacts:
-  - path: artifacts\*.*
+  - path: src\OpenDLC\artifacts\*.nupkg
