@@ -1,0 +1,8 @@
+title: Opendlc
+description: Opening up DLC formats.
+google_analytics: UA-62961705-1
+show_downloads: true
+theme: jekyll-theme-dinky
+
+gems:
+  - jekyll-mentions
