@@ -4,10 +4,8 @@ before_build:
 build_script:
   - dotnet build src
 test_script:
-  - cd src
-  - dotnet test OpenDLC.Tests
+  - dotnet test src\OpenDLC.Tests
 after_build:
-  - cd src
-  - dotnet pack OpenDLC -o artifacts
+  - dotnet pack src\OpenDLC -o artifacts
 artifacts:
   - path: artifacts\**\*.*
