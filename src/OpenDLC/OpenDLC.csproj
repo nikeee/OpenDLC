@@ -7,7 +7,6 @@
   <PropertyGroup>
     <Version>2.0.0</Version>
     <Authors>Niklas Mollenhauer</Authors>
-    <Company>Company XYZ</Company>
     <Product>OpenDLC</Product>
     <PackageId>OpenDLC</PackageId>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
