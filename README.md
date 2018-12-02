@@ -4,7 +4,7 @@
 
 ```Shell
 # Install using dotnet cli:
-dotnet add package OpenDLC --version
+dotnet add package OpenDLC
 # Using Package Manager:
 Install-Package OpenDLC
 ```
