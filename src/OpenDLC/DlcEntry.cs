@@ -1,11 +1,7 @@
-﻿namespace OpenDLC
+﻿namespace OpenDLC;
+public record DlcEntry : DownloadEntry
 {
-    public class DlcEntry : DownloadEntry
-    {
-        public DlcEntry(string url)
-            : base(url)
-        { }
+    public DlcEntry(string url) : base(url) { }
 
-        public static implicit operator string (DlcEntry value) => value?.Url;
-    }
+    public static implicit operator string(DlcEntry value) => value?.Url;
 }

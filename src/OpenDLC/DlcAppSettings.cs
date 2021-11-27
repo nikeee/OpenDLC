@@ -1,20 +1,9 @@
 ﻿
 namespace OpenDLC
 {
-    public class DlcAppSettings
+    public record DlcAppSettings(string ApplicationId, string Secret, string Revision)
     {
-        public string ApplicationId { get; }
-        public string Secret { get; }
-        public string Revision { get; }
-
         private byte[] _secretBytes = null;
-
-        public DlcAppSettings(string appId, string appSecret, string revision)
-        {
-            ApplicationId = appId;
-            Secret = appSecret;
-            Revision = revision;
-        }
 
         internal byte[] GetSecretBuffer() => _secretBytes ??= ConvertEx.FromHexString(Secret);
     }

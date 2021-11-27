@@ -64,21 +64,19 @@ namespace OpenDLC
                     var generator = header.Element("generator");
                     if (generator != null)
                     {
-                        var generatorObj = new DlcGenerator
-                        {
-                            Application = generator.Element("app")?.Value,
-                            Url = generator.Element("url")?.Value
-                        };
 
+                        var application = generator.Element("app")?.Value;
+                        var url = generator.Element("url")?.Value;
+
+                        Version? v = null;
                         var version = generator.Element("version");
                         if (version != null)
                         {
-                            Version ver;
-                            if (Version.TryParse(version.Value, out ver))
-                                generatorObj.Version = ver;
+                            if (Version.TryParse(version.Value, out Version ver))
+                                v = ver;
                         }
 
-                        container.Generator = generatorObj;
+                        container.Generator = new DlcGenerator(application, v, url);
                     }
 
                     var tribute = header.Element("tribute");

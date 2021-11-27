@@ -1,12 +1,2 @@
-﻿namespace OpenDLC
-{
-    public class DlcTribute
-    {
-        public string Name { get; set; }
-
-        public DlcTribute(string name)
-        {
-            Name = name;
-        }
-    }
-}
+﻿namespace OpenDLC;
+public record DlcTribute(string Name);
