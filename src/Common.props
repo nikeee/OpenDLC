@@ -1,0 +1,19 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>3.0.0</Version>
+    <Authors>Niklas Mollenhauer</Authors>
+    <AssemblyVersion>§.0.0.0</AssemblyVersion>
+    <FileVersion>§.0.0</FileVersion>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Description>.NET API for DLC formats. Supports DLC, RSDF and CCF.</Description>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/nikeee/OpenDLC/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/nikeee/OpenDLC</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nikeee/OpenDLC.git</RepositoryUrl>
+  </PropertyGroup>
+
+</Project>
