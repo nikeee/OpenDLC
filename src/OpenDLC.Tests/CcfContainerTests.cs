@@ -16,8 +16,9 @@ namespace OpenDLC.Tests
                 "http://example.eu",
                 "http://example.com/example.pdf",
                 "http://example.com/example.jpg",
-                "https://example.us/example.jpg"
+                "https://example.us/example.jpg",
             };
+
             const string expectedTitle = "This is the title";
             const string expectedService = "";
             const string expectedPassword = null;
@@ -57,8 +58,9 @@ namespace OpenDLC.Tests
                 "http://example.eu",
                 "http://example.com/example.pdf",
                 "http://example.com/example.jpg",
-                "https://example.us/example.jpg"
+                "https://example.us/example.jpg",
             };
+
             const string expectedTitle = "k4b98932quv7dm9";
             const string expectedService = "";
             const string expectedPassword = null;
@@ -96,8 +98,9 @@ namespace OpenDLC.Tests
                 "http://example.eu",
                 "http://example.com/example.pdf",
                 "http://example.com/example.jpg",
-                "https://example.us/example.jpg"
+                "https://example.us/example.jpg",
             };
+
             const string expectedTitle = "This is the title";
             const string expectedService = "";
             const string expectedPassword = null;
@@ -149,8 +152,9 @@ namespace OpenDLC.Tests
                 "http://example.eu",
                 "http://example.com/example.pdf",
                 "http://example.com/example.jpg",
-                "https://example.us/example.jpg"
+                "https://example.us/example.jpg",
             };
+
             const string expectedTitle = "k4b98932quv7dm9";
             const string expectedService = "";
             const string expectedPassword = null;

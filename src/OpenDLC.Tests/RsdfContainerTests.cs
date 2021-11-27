@@ -28,7 +28,7 @@ namespace OpenDLC.Tests
                 "http://example.eu",
                 "http://example.com/example.pdf",
                 "http://example.com/example.jpg",
-                "https://example.us/example.jpg"
+                "https://example.us/example.jpg",
             };
 
             var fileName = TestResources.GetResourcePath("sample-container-1.rsdf");
@@ -49,7 +49,7 @@ namespace OpenDLC.Tests
                 "http://example.eu",
                 "http://example.com/example.pdf",
                 "http://example.com/example.jpg",
-                "https://example.us/example.jpg"
+                "https://example.us/example.jpg",
             };
 
             var fileName = TestResources.GetResourcePath("sample-container-2.rsdf");

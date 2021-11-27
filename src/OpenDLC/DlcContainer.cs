@@ -161,7 +161,7 @@ namespace OpenDLC
 
         private static byte[] CreateDecryptionKey(byte[] tempKey, byte[] appSecret)
         {
-            using (var aes = new AesManaged())
+            using (var aes = Aes.Create())
             {
                 aes.Key = appSecret;
                 aes.Mode = CipherMode.ECB;
