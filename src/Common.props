@@ -11,7 +11,7 @@
     <FileVersion>3.0.0</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <Description>.NET API for DLC formats. Supports DLC, RSDF and CCF.</Description>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/nikeee/OpenDLC/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/nikeee/OpenDLC</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikeee/OpenDLC.git</RepositoryUrl>
   </PropertyGroup>
