@@ -58,12 +58,12 @@ namespace OpenDLC
 
         public string SaveAsString()
         {
-            using var enc = RsdfFormat.Algorithm.CreateEncryptor(RsdfFormat.Algorithm.Key, RsdfFormat.IV);
             var lines = this.Select(entry => entry.Url).ToArray();
 
             var sb = new StringBuilder();
             var outputBuffer = new byte[4096];
 
+            var nextIv = RsdfFormat.IV;
             for (int i = 0; i < lines.Length; ++i)
             {
                 var currentLink = lines[i];
@@ -71,10 +71,12 @@ namespace OpenDLC
                     continue;
 
                 var linkBytes = Encoding.UTF8.GetBytes(currentLink);
-                var sizedOutput = enc.TransformFinalBlock(linkBytes, 0, linkBytes.Length);
-                var b64 = Convert.ToBase64String(sizedOutput);
+                var output = RsdfFormat.Algorithm.EncryptCfb(linkBytes, nextIv);
+                var b64 = Convert.ToBase64String(output);
 
                 sb.Append(b64).Append("\r\n");
+
+                nextIv = AppendShiftToLeft(nextIv, output);
             }
 
             var unencodedData = Encoding.UTF8.GetBytes(sb.ToString());

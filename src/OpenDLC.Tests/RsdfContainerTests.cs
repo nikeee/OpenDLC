@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Xunit;
 using System.Linq;
 
@@ -40,6 +40,30 @@ namespace OpenDLC.Tests
             Assert.Equal(expectedLinks, container.Select(l => l.Url).ToArray());
         }
 
+        [Fact]
+        public void RoundTrip()
+        {
+            // This is from Share-Links.biz
+            string[] expectedLinks =
+            {
+                "http://example.eu",
+                "http://example.com/example.pdf",
+                "http://example.com/example.jpg",
+                "https://example.us/example.jpg",
+            };
+
+            var container = new RsdfContainer();
+            foreach (var expectedLink in expectedLinks)
+                container.Add(new RsdfEntry(expectedLink));
+
+            var str = container.SaveAsString();
+            var actualContainer = RsdfContainer.FromString(str);
+
+            Assert.NotNull(actualContainer);
+            Assert.All(actualContainer, i => Assert.NotNull(i));
+            Assert.Equal(4, actualContainer.Count);
+            Assert.Equal(expectedLinks, actualContainer.Select(l => l.Url).ToArray());
+        }
 
         [Fact]
         public void FromFile2()
