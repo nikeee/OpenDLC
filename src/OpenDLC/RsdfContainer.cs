@@ -58,7 +58,7 @@ namespace OpenDLC
 
         public string SaveAsString()
         {
-            using var enc = RsdfFormat.Algorithm.CreateEncryptor(RsdfFormat.Key, RsdfFormat.IV);
+            using var enc = RsdfFormat.Algorithm.CreateEncryptor(RsdfFormat.Algorithm.Key, RsdfFormat.IV);
             var lines = this.Select(entry => entry.Url).ToArray();
 
             var sb = new StringBuilder();
@@ -71,10 +71,7 @@ namespace OpenDLC
                     continue;
 
                 var linkBytes = Encoding.UTF8.GetBytes(currentLink);
-                var written = enc.TransformBlock(linkBytes, 0, linkBytes.Length, outputBuffer, 0);
-                var sizedOutput = new byte[written];
-                Buffer.BlockCopy(outputBuffer, 0, sizedOutput, 0, written);
-
+                var sizedOutput = enc.TransformFinalBlock(linkBytes, 0, linkBytes.Length);
                 var b64 = Convert.ToBase64String(sizedOutput);
 
                 sb.Append(b64).Append("\r\n");
@@ -102,30 +99,46 @@ namespace OpenDLC
 
             var container = new RsdfContainer();
 
-            using (var dec = RsdfFormat.Algorithm.CreateDecryptor(RsdfFormat.Key, RsdfFormat.IV))
+
+            byte[] nextIv = RsdfFormat.IV;
+            foreach (var paddedLine in lines)
             {
-                for (int i = 0; i < lines.Length; ++i)
-                {
-                    var line = lines[i].Trim();
-                    if (string.IsNullOrWhiteSpace(line))
-                        continue;
+                Debug.Assert(nextIv.Length == 16);
 
-                    var linkData = Convert.FromBase64String(line);
+                var line = paddedLine.Trim();
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
 
-                    var outputBuffer = new byte[linkData.Length];
-                    dec.TransformBlock(linkData, 0, linkData.Length, outputBuffer, 0);
+                var linkData = Convert.FromBase64String(line);
 
-                    var link = Encoding.UTF8.GetString(outputBuffer);
+                var outputBuffer = RsdfFormat.Algorithm.DecryptCfb(linkData, nextIv);
 
-                    const string ccfPrefix = "CCF:";
-                    if (link.StartsWith(ccfPrefix))
-                        link = link.Substring(ccfPrefix.Length).Trim();
+                var link = Encoding.ASCII.GetString(outputBuffer);
 
-                    container.Add(new RsdfEntry(link));
-                }
+                const string ccfPrefix = "CCF:";
+                if (link.StartsWith(ccfPrefix))
+                    link = link[ccfPrefix.Length..].Trim();
+
+                container.Add(new RsdfEntry(link));
+
+                nextIv = AppendShiftToLeft(nextIv , linkData);
             }
 
             return container;
+        }
+
+        private static byte[] AppendShiftToLeft(ReadOnlySpan<byte> a, byte[] b)
+        {
+            var res = new byte[a.Length];
+            var start = a.Length - b.Length;
+            a.CopyTo(res);
+
+            if (start >= 0)
+                Buffer.BlockCopy(b, 0, res, start, b.Length);
+            else
+                Buffer.BlockCopy(b, start * -1, res, 0, res.Length);
+
+            return res;
         }
     }
 }

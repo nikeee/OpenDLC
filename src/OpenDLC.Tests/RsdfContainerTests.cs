@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Xunit;
 using System.Linq;
 
@@ -6,7 +6,7 @@ namespace OpenDLC.Tests
 {
     public class RsdfContainerTests
     {
-        [Fact(Skip=".NET Core does not support CFB mode that is needed for RSDF")]
+        [Fact]
         public void FromString()
         {
             var container = RsdfContainer.FromString("696D6C5666374861645137307A6C466C56755341654E33716D3859367635734E476B5249415649744D4C713259723861726E4F5368673D3D0D0A");
@@ -19,7 +19,7 @@ namespace OpenDLC.Tests
             Assert.Equal(sampleLink, container[0].Url);
         }
 
-        [Fact(Skip=".NET Core does not support CFB mode that is needed for RSDF")]
+        [Fact]
         public void FromFile1()
         {
             // This is from Share-Links.biz
@@ -40,7 +40,8 @@ namespace OpenDLC.Tests
             Assert.Equal(expectedLinks, container.Select(l => l.Url).ToArray());
         }
 
-        [Fact(Skip=".NET Core does not support CFB mode that is needed for RSDF")]
+
+        [Fact]
         public void FromFile2()
         {
             // This is from linkcrypt.ws
@@ -61,7 +62,7 @@ namespace OpenDLC.Tests
             Assert.Equal(expectedLinks, container.Select(l => l.Url).ToArray());
         }
 
-        [Fact(Skip=".NET Core does not support CFB mode that is needed for RSDF")]
+        [Fact]
         public void SaveAsString()
         {
             var container = new RsdfContainer();
@@ -73,7 +74,7 @@ namespace OpenDLC.Tests
             Assert.Equal(destContainer, containerString);
         }
 
-        [Fact(Skip=".NET Core does not support CFB mode that is needed for RSDF")]
+        [Fact]
         public void FromWithNullArgument()
         {
             Assert.Throws<ArgumentNullException>(() => RsdfContainer.FromString(null));
@@ -86,7 +87,7 @@ namespace OpenDLC.Tests
             Assert.ThrowsAsync<ArgumentNullException>(async () => await RsdfContainer.FromStreamAsync(null));
         }
 
-        [Fact(Skip=".NET Core does not support CFB mode that is needed for RSDF")]
+        [Fact]
         public void SaveWithNullArgument()
         {
             var c = new RsdfContainer();
