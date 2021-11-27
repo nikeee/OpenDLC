@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDLC", "OpenDLC\OpenDLC.csproj", "{431AF39E-76AC-4E44-8B72-E71800030548}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDLC", "src\OpenDLC\OpenDLC.csproj", "{431AF39E-76AC-4E44-8B72-E71800030548}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDLC.Tests", "OpenDLC.Tests\OpenDLC.Tests.csproj", "{FC69CC80-B01D-413F-AAC1-D0ECC63B47CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDLC.Tests", "src\OpenDLC.Tests\OpenDLC.Tests.csproj", "{FC69CC80-B01D-413F-AAC1-D0ECC63B47CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
