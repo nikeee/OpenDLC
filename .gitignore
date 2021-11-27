@@ -100,3 +100,5 @@ Thumbs.db
 dist/*.nupkg
 
 *.user
+
+.vs
