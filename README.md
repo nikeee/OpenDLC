@@ -1,4 +1,4 @@
-# OpenDLC [![Travis Build Status](https://travis-ci.org/nikeee/OpenDLC.svg)](https://travis-ci.org/nikeee/OpenDLC) [![Windows Build status](https://ci.appveyor.com/api/projects/status/3j28aejetcfv57b3?svg=true)](https://ci.appveyor.com/project/nikeee/opendlc) [![NuGet](https://img.shields.io/nuget/v/OpenDLC.svg)](https://www.nuget.org/packages/OpenDLC/)
+# OpenDLC [![CI](https://github.com/nikeee/OpenDLC/actions/workflows/CI.yml/badge.svg)](https://github.com/nikeee/OpenDLC/actions/workflows/CI.yml) [![NuGet](https://img.shields.io/nuget/v/OpenDLC.svg)](https://www.nuget.org/packages/OpenDLC/)
 
 .NET API for DLC formats. Supports DLC, RSDF and CCF.
 
