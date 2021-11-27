@@ -16,11 +16,6 @@ namespace OpenDLC
             Revision = revision;
         }
 
-        internal byte[] GetSecretBuffer()
-        {
-            if (_secretBytes == null)
-                _secretBytes = ConvertEx.FromHexString(Secret);
-            return _secretBytes;
-        }
+        internal byte[] GetSecretBuffer() => _secretBytes ??= ConvertEx.FromHexString(Secret);
     }
 }

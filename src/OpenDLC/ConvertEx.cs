@@ -14,7 +14,7 @@ namespace OpenDLC
 
             value = value.Trim();
             if (value.Length == 0)
-                return new byte[0];
+                return Array.Empty<byte>();
 
             if ((value.Length & 1) != 0)
                 throw new FormatException("The length of data, ignoring white-space characters, is not zero or a multiple of 2.");

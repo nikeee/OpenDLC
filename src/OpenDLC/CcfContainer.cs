@@ -28,16 +28,13 @@ namespace OpenDLC
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
-            var ms = stream as MemoryStream;
-            if (ms != null)
+            if (stream is MemoryStream ms)
             {
                 return FromBuffer(ms.ToArray());
             }
-            using (var newMs = new MemoryStream())
-            {
-                stream.CopyTo(newMs);
-                return FromBuffer(newMs.ToArray());
-            }
+            using var newMs = new MemoryStream();
+            stream.CopyTo(newMs);
+            return FromBuffer(newMs.ToArray());
         }
 
         #endregion
@@ -49,8 +46,7 @@ namespace OpenDLC
             if (buffer.Length == 0)
                 throw new ArgumentException("Empty " + nameof(buffer));
 
-            Version ccfVersion;
-            var xml = DecryptXml(buffer, out ccfVersion);
+            var xml = DecryptXml(buffer, out Version ccfVersion);
             if (xml == null)
                 throw new NotSupportedException("The CCF version is not supported.");
 
@@ -89,19 +85,16 @@ namespace OpenDLC
             const int version10KeyIndex = 0;
 
             var xmlDataBytes = SerializeToXml();
-            using (var rij = CcfFormat.CreateSymmetricAlgorithm())
-            {
-                rij.IV = CcfFormat.IVs[version10KeyIndex];
-                rij.Key = CcfFormat.Keys[version10KeyIndex];
-                using (var enc = rij.CreateEncryptor())
-                {
-                    var outputResized = enc.TransformFinalBlock(xmlDataBytes, 0, xmlDataBytes.Length);
+            using var rij = CcfFormat.CreateSymmetricAlgorithm();
+            rij.IV = CcfFormat.IVs[version10KeyIndex];
+            rij.Key = CcfFormat.Keys[version10KeyIndex];
 
-                    Debug.Assert(outputResized.Length != 0);
+            using var enc = rij.CreateEncryptor();
+            var outputResized = enc.TransformFinalBlock(xmlDataBytes, 0, xmlDataBytes.Length);
 
-                    return outputResized;
-                }
-            }
+            Debug.Assert(outputResized.Length != 0);
+
+            return outputResized;
         }
 
         private static string DecryptXml(byte[] data, out Version usedVersion)
@@ -117,30 +110,28 @@ namespace OpenDLC
                 {
                     rij.IV = CcfFormat.IVs[i];
                     rij.Key = CcfFormat.Keys[i];
-                    using (var dec = rij.CreateDecryptor())
+
+                    using var dec = rij.CreateDecryptor();
+                    var written = dec.TransformBlock(data, 0, data.Length, output, 0);
+
+                    var outputResized = new byte[written];
+                    Buffer.BlockCopy(output, 0, outputResized, 0, written);
+
+                    var xmlData = Encoding.UTF8.GetString(outputResized);
+                    if (xmlData[^1] == '\0')
                     {
-                        var written = dec.TransformBlock(data, 0, data.Length, output, 0);
+                        // Fallback for \0 padding
+                        xmlData = xmlData.Remove(xmlData.IndexOf('\0'));
+                        Debug.Assert(xmlData.Length > 0);
+                    }
 
-                        var outputResized = new byte[written];
-                        Buffer.BlockCopy(output, 0, outputResized, 0, written);
+                    Debug.Assert(xmlData != null);
+                    Debug.Assert(xmlData[xmlData.Length - 1] != '\0');
 
-                        var xmlData = Encoding.UTF8.GetString(outputResized);
-
-                        if (xmlData[xmlData.Length - 1] == '\0')
-                        {
-                            // Fallback for \0 padding
-                            xmlData = xmlData.Remove(xmlData.IndexOf('\0'));
-                            Debug.Assert(xmlData.Length > 0);
-                        }
-
-                        Debug.Assert(xmlData != null);
-                        Debug.Assert(xmlData[xmlData.Length - 1] != '\0');
-
-                        if (IsValidContainerXml(xmlData))
-                        {
-                            usedVersion = CcfFormat.Versions[i];
-                            return xmlData;
-                        }
+                    if (IsValidContainerXml(xmlData))
+                    {
+                        usedVersion = CcfFormat.Versions[i];
+                        return xmlData;
                     }
                 }
             }
@@ -163,26 +154,23 @@ namespace OpenDLC
         {
             Debug.Assert(xmlData != null);
             xmlData = xmlData.Trim();
-            using (var reader = new StringReader(xmlData))
-            using (var rr = XmlReader.Create(reader))
-            {
-                return _serializer.Deserialize(rr) as CryptLoadContainer;
-            }
+            using var reader = new StringReader(xmlData);
+            using var rr = XmlReader.Create(reader);
+            return _serializer.Deserialize(rr) as CryptLoadContainer;
         }
 
         private byte[] SerializeToXml()
         {
             var serCon = CryptLoadContainer.FromCcfContainer(this);
-            using (var ms = new MemoryStream())
-            {
-                XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
-                namespaces.Add(string.Empty, string.Empty); // No namespaces because the others don't do it as well
+            using var ms = new MemoryStream();
 
-                using (var ww = XmlWriter.Create(ms, CcfFormat.WriterSettings))
-                    _serializer.Serialize(ww, serCon, namespaces);
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+            namespaces.Add(string.Empty, string.Empty); // No namespaces because the others don't do it as well
 
-                return ms.ToArray();
-            }
+            using (var ww = XmlWriter.Create(ms, CcfFormat.WriterSettings))
+                _serializer.Serialize(ww, serCon, namespaces);
+
+            return ms.ToArray();
         }
 
         #endregion

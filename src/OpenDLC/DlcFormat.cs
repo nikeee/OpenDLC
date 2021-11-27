@@ -9,9 +9,6 @@ namespace OpenDLC
         internal const string RateLimitExceededKey = "2YVhzRFdjR2dDQy9JL25aVXFjQ1RPZ";
         internal const int TempKeyLength = 88;
 
-        internal static string DecodeDataString(string encodedString)
-        {
-            return Encoding.UTF8.GetString(Convert.FromBase64String(encodedString));
-        }
+        internal static string DecodeDataString(string encodedString) => Encoding.UTF8.GetString(Convert.FromBase64String(encodedString));
     }
 }

@@ -137,28 +137,26 @@ namespace OpenDLC
 
             var msg = new HttpRequestMessage(HttpMethod.Post, ub.Uri);
 
-            using (var cl = new HttpClient())
-            using (var res = await cl.SendAsync(msg).ConfigureAwait(false))
-            {
-                if (!res.IsSuccessStatusCode)
-                    throw new DlcDecryptionException("Server responded with unsuccessful HTTP status code.");
+            using var cl = new HttpClient();
+            using var res = await cl.SendAsync(msg).ConfigureAwait(false);
+            if (!res.IsSuccessStatusCode)
+                throw new DlcDecryptionException("Server responded with unsuccessful HTTP status code.");
 
-                var resContent = await res.Content.ReadAsStringAsync().ConfigureAwait(false) ?? string.Empty;
+            var resContent = await res.Content.ReadAsStringAsync().ConfigureAwait(false) ?? string.Empty;
 
-                var match = Regex.Match(resContent, "<rc>(.*)</rc>");
-                if (!match.Success)
-                    throw new DlcDecryptionException($"Server responded with non-XML content:{Environment.NewLine}{resContent}");
+            var match = Regex.Match(resContent, "<rc>(.*)</rc>");
+            if (!match.Success)
+                throw new DlcDecryptionException($"Server responded with non-XML content:{Environment.NewLine}{resContent}");
 
-                var tempKey = match.Groups[1]?.Value ?? string.Empty;
-                tempKey = tempKey.Trim();
-                if (tempKey == string.Empty)
-                    throw new DlcDecryptionException("Server responded with empty decryption key.");
+            var tempKey = match.Groups[1]?.Value ?? string.Empty;
+            tempKey = tempKey.Trim();
+            if (tempKey == string.Empty)
+                throw new DlcDecryptionException("Server responded with empty decryption key.");
 
-                if (tempKey == DlcFormat.RateLimitExceededKey)
-                    throw new DlcLimitExceededException();
+            if (tempKey == DlcFormat.RateLimitExceededKey)
+                throw new DlcLimitExceededException();
 
-                return Convert.FromBase64String(tempKey);
-            }
+            return Convert.FromBase64String(tempKey);
         }
 
         private static byte[] CreateDecryptionKey(byte[] tempKey, byte[] appSecret)
@@ -181,7 +179,7 @@ namespace OpenDLC
 
         private static string DecryptContainer(byte[] containerContent, byte[] key)
         {
-            byte[] decContainer = null;
+            byte[] decContainer;
             try
             {
                 decContainer = DecryptWithPadding(key, PaddingMode.PKCS7, containerContent);
@@ -197,15 +195,13 @@ namespace OpenDLC
 
         private static byte[] DecryptWithPadding(byte[] ivPlusKey, PaddingMode paddingMode, byte[] data)
         {
-            using (var aes = new AesManaged())
-            {
-                aes.Key = aes.IV = ivPlusKey;
-                aes.Mode = CipherMode.CBC;
-                aes.Padding = paddingMode;
+            using var aes = Aes.Create();
+            aes.Key = aes.IV = ivPlusKey;
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = paddingMode;
 
-                using (var dec = aes.CreateDecryptor())
-                    return dec.TransformFinalBlock(data, 0, data.Length);
-            }
+            using var dec = aes.CreateDecryptor();
+            return dec.TransformFinalBlock(data, 0, data.Length);
         }
 
         private static XDocument DecodeXmlData(string encodedXml)
@@ -232,13 +228,7 @@ namespace OpenDLC
             }
         }
 
-        public override void SaveToStream(Stream stream)
-        {
-            throw new NotImplementedException();
-        }
-        public override Task SaveToStreamAsync(Stream stream)
-        {
-            throw new NotImplementedException();
-        }
+        public override void SaveToStream(Stream stream) => throw new NotSupportedException();
+        public override Task SaveToStreamAsync(Stream stream) => throw new NotSupportedException();
     }
 }

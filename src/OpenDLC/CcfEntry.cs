@@ -19,8 +19,7 @@ namespace OpenDLC
         {
             Debug.Assert(ccfDownload != null);
 
-            ulong fsize;
-            if (ulong.TryParse(ccfDownload.FileSize, out fsize))
+            if (ulong.TryParse(ccfDownload.FileSize, out ulong fsize))
                 FileSize = fsize;
             FileName = ccfDownload.FileName;
         }

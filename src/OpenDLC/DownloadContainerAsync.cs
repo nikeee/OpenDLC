@@ -12,8 +12,8 @@ namespace OpenDLC
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException(nameof(fileName));
 
-            using (var fs = File.OpenWrite(fileName))
-                await SaveToStreamAsync(fs).ConfigureAwait(false);
+            using var fs = File.OpenWrite(fileName);
+            await SaveToStreamAsync(fs).ConfigureAwait(false);
         }
 
         public abstract Task SaveToStreamAsync(Stream stream);
