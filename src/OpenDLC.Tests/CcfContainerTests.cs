@@ -204,10 +204,10 @@ namespace OpenDLC.Tests
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromBuffer(null));
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromFile(null));
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromFile(string.Empty));
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await CcfContainer.FromFileAsync(null));
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await CcfContainer.FromFileAsync(string.Empty));
+            Assert.ThrowsAsync<ArgumentNullException>(() => CcfContainer.FromFileAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => CcfContainer.FromFileAsync(string.Empty));
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromStream(null));
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await CcfContainer.FromStreamAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => CcfContainer.FromStreamAsync(null));
         }
 
         [Fact]
@@ -216,10 +216,10 @@ namespace OpenDLC.Tests
             var c = new CcfContainer();
             Assert.Throws<ArgumentNullException>(() => c.SaveToFile(null));
             Assert.Throws<ArgumentNullException>(() => c.SaveToFile(string.Empty));
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await c.SaveToFileAsync(null));
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await c.SaveToFileAsync(string.Empty));
+            Assert.ThrowsAsync<ArgumentNullException>(() => c.SaveToFileAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => c.SaveToFileAsync(string.Empty));
             Assert.Throws<ArgumentNullException>(() => c.SaveToStream(null));
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await c.SaveToStreamAsync(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => c.SaveToStreamAsync(null));
         }
     }
 }
