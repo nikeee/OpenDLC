@@ -21,7 +21,6 @@ namespace OpenDLC.Tests
 
             const string expectedTitle = "This is the title";
             const string expectedService = "";
-            const string expectedPassword = null;
             const string expectedPassword2 = "";
             const string expectedPackageUrl = "Directlinks";
             const string expectedPackageComment = "Created on Share-Links.biz";
@@ -39,7 +38,6 @@ namespace OpenDLC.Tests
             Assert.All(package, i => Assert.NotNull(i));
             Assert.Equal(4, package.Count);
             Assert.Equal(expectedPassword2, package.Password);
-            // Assert.That(package.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
             Assert.Equal(expectedTitle, package.Name);
             Assert.Equal(expectedService, package.Service);
             Assert.Equal(expectedPackageUrl, package.Url);
@@ -63,8 +61,6 @@ namespace OpenDLC.Tests
 
             const string expectedTitle = "k4b98932quv7dm9";
             const string expectedService = "";
-            const string expectedPassword = null;
-            const string expectedPassword2 = "";
             const string expectedPackageUrl = "Directlinks";
             const string expectedPackageComment = "Erstellt von Linkcrypt.ws";
 
@@ -80,7 +76,6 @@ namespace OpenDLC.Tests
             Assert.NotNull(package);
             Assert.All(package, i => Assert.NotNull(i));
             Assert.Equal(4, package.Count);
-            // Assert.That(package.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
             Assert.Equal(expectedTitle, package.Name);
             Assert.Equal(expectedService, package.Service);
             Assert.Equal(expectedPackageUrl, package.Url);
@@ -104,7 +99,6 @@ namespace OpenDLC.Tests
             const string expectedTitle = "This is the title";
             const string expectedService = "";
             const string expectedPassword = null;
-            const string expectedPassword2 = "";
             const string expectedPackageUrl = "Directlinks";
             const string expectedPackageComment = "Created on Share-Links.biz";
 
@@ -133,7 +127,6 @@ namespace OpenDLC.Tests
                 Assert.NotNull(actualPackage);
                 Assert.All(actualPackage, i => Assert.NotNull(i));
                 Assert.Equal(4, actualPackage.Count);
-                // Assert.That(actualPackage.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
                 Assert.Equal(expectedTitle, actualPackage.Name);
                 Assert.Equal(expectedService, actualPackage.Service);
                 Assert.Equal(expectedPackageUrl, actualPackage.Url);
@@ -158,7 +151,6 @@ namespace OpenDLC.Tests
             const string expectedTitle = "k4b98932quv7dm9";
             const string expectedService = "";
             const string expectedPassword = null;
-            const string expectedPassword2 = "";
             const string expectedPackageUrl = "Directlinks";
             const string expectedPackageComment = "Erstellt von Linkcrypt.ws";
 
@@ -187,7 +179,6 @@ namespace OpenDLC.Tests
                 Assert.NotNull(actualPackage);
                 Assert.All(actualPackage, i => Assert.NotNull(i));
                 Assert.Equal(4, actualPackage.Count);
-                // Assert.That(actualPackage.Password, Is.EqualTo(expectedPassword).Or.EqualTo(expectedPassword2));
                 Assert.Equal(expectedTitle, actualPackage.Name);
                 Assert.Equal(expectedService, actualPackage.Service);
                 Assert.Equal(expectedPackageUrl, actualPackage.Url);
