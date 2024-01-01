@@ -199,27 +199,27 @@ namespace OpenDLC.Tests
         }
 
         [Fact]
-        public void FromWithNullArgument()
+        public async void FromWithNullArgument()
         {
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromBuffer(null));
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromFile(null));
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromFile(string.Empty));
-            Assert.ThrowsAsync<ArgumentNullException>(() => CcfContainer.FromFileAsync(null));
-            Assert.ThrowsAsync<ArgumentNullException>(() => CcfContainer.FromFileAsync(string.Empty));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => CcfContainer.FromFileAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => CcfContainer.FromFileAsync(string.Empty));
             Assert.Throws<ArgumentNullException>(() => CcfContainer.FromStream(null));
-            Assert.ThrowsAsync<ArgumentNullException>(() => CcfContainer.FromStreamAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => CcfContainer.FromStreamAsync(null));
         }
 
         [Fact]
-        public void SaveWithNullArgument()
+        public async void SaveWithNullArgument()
         {
             var c = new CcfContainer();
             Assert.Throws<ArgumentNullException>(() => c.SaveToFile(null));
             Assert.Throws<ArgumentNullException>(() => c.SaveToFile(string.Empty));
-            Assert.ThrowsAsync<ArgumentNullException>(() => c.SaveToFileAsync(null));
-            Assert.ThrowsAsync<ArgumentNullException>(() => c.SaveToFileAsync(string.Empty));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => c.SaveToFileAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => c.SaveToFileAsync(string.Empty));
             Assert.Throws<ArgumentNullException>(() => c.SaveToStream(null));
-            Assert.ThrowsAsync<ArgumentNullException>(() => c.SaveToStreamAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => c.SaveToStreamAsync(null));
         }
     }
 }
