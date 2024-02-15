@@ -5,8 +5,6 @@ on:
     branches:
       - master
   pull_request:
-    branches:
-      - master
 
 jobs:
   build:
@@ -23,7 +21,8 @@ jobs:
         with:
           dotnet-version: 8.x
           cache: true
-  
-      - run: dotnet restore
+          cache-dependency-path: 'src/*/packages.lock.json'
+
+      - run: dotnet restore --locked-mode
       - run: dotnet build --no-restore
       - run: dotnet test --no-build --verbosity normal
