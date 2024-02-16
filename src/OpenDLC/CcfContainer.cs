@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -148,7 +147,7 @@ namespace OpenDLC
 
         #region serialization
 
-        private static readonly XmlSerializer _serializer = new XmlSerializer(typeof(CryptLoadContainer));
+        private static readonly XmlSerializer _serializer = new(typeof(CryptLoadContainer));
 
         private static CryptLoadContainer SerializeFromXml(string xmlData)
         {
@@ -164,7 +163,7 @@ namespace OpenDLC
             var serCon = CryptLoadContainer.FromCcfContainer(this);
             using var ms = new MemoryStream();
 
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+            XmlSerializerNamespaces namespaces = new();
             namespaces.Add(string.Empty, string.Empty); // No namespaces because the others don't do it as well
 
             using (var ww = XmlWriter.Create(ms, CcfFormat.WriterSettings))

@@ -2,12 +2,7 @@
 
 namespace OpenDLC
 {
-    public class DlcDecryptionException : Exception
-    {
-        public DlcDecryptionException(string message)
-            : base(message)
-        { }
-    }
+    public class DlcDecryptionException(string message) : Exception(message) { }
 
     public class DlcLimitExceededException : DlcDecryptionException
     {

@@ -19,8 +19,8 @@ public record CcfEntry : DownloadEntry
     {
         Debug.Assert(ccfDownload != null);
 
-        if (ulong.TryParse(ccfDownload.FileSize, out ulong fsize))
-            FileSize = fsize;
+        if (ulong.TryParse(ccfDownload.FileSize, out ulong fileSize))
+            FileSize = fileSize;
         FileName = ccfDownload.FileName;
     }
 
