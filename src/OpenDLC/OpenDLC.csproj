@@ -6,5 +6,8 @@
     <Product>OpenDLC</Product>
     <PackageId>OpenDLC</PackageId>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="8.0.19" />
+  </ItemGroup>
 
 </Project>
