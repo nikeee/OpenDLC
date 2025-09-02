@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="8.0.19" />
     <Content Include="Resources\*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
