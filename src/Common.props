@@ -15,8 +15,6 @@
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/nikeee/OpenDLC</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nikeee/OpenDLC.git</RepositoryUrl>
-
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
 </Project>
